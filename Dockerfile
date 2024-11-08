@@ -12,7 +12,7 @@ COPY ./package.json .
 RUN npm install --dev
 
 # copy everything to workdir
-COPY . .
+COPY . /app
 
 # run the js script
-ENTRYPOINT ["${NODEMODE}", "./src/app.js"]
+CMD npm run dev
