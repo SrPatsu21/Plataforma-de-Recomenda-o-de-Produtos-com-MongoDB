@@ -4,8 +4,10 @@ const hostname = "127.0.0.1";
 const port = 3000;
 // mongo
 const { MongoClient } = require('mongodb');
-const mongourl = 'mongodb://localhost:27017';
-const client = new MongoClient(mongourl);
+const dbAddress = `localhost`;
+const dbPort = 27017
+const dbName = `test`;
+const mongourl = `mongodb://${dbAddress}:${dbPort}/${dbName}`;
 
 // app
 const cats = ['Garfield', 'Tom', 'Simba'];
@@ -13,15 +15,33 @@ const cats = ['Garfield', 'Tom', 'Simba'];
 const app = express();
 // app.use(express.json);
 
+async function listDatabases(client){
+    databasesList = await client.db().admin().listDatabases();
+
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+};
+
 app.get('/mongo', async(req, res) =>{
+    const client = new MongoClient(mongourl);
+
     try {
-        await client.connect();
-        let test = await listDatabases(client);
-        test.than(data => {
-            res.json(data)
-        })
+
+        // Connect to the MongoDB cluster
+
+        let test = await client.connect();
+        test.than(data =>{
+            console.log(data);
+        }
+        )
     } catch (e) {
+
         console.error(e);
+
+    } finally {
+
+        await client.close();
+
     }
 })
 
