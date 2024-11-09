@@ -1,19 +1,37 @@
 # Use root/example as user/password credentials
 services:
-  node:
-    container_name: nodesv
+  web:
+    container_name: node-web
     image: app
     restart: always
     build:
         context: .
         dockerfile: Dockerfile
         target: base
+    command:
+      - bash
+      - -c
+      - |
+        npm install --dev
+        npm run dev
+    tty: true
+    volumes:
+      - .:/app
     ports:
-        - "${PORT}:${PORT}"
-  # mongo:
-  #   image: mongo
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: root
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - db
+  db:
+    container_name: mongo-db
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    #no output
+    logging:
+      driver: "none"
+
 

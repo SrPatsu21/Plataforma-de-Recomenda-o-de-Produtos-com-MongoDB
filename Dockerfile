@@ -5,14 +5,13 @@ FROM node as base
 # name of the folder that docker will work with this app
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends
+
 # copy to know what need to be install
 COPY ./package.json .
 
 # install dependencies
 RUN npm install --dev
 
-# copy everything to workdir
-COPY . /app
-
-# run the js script
-CMD npm run dev
+EXPOSE 3000
