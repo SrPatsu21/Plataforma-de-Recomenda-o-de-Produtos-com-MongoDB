@@ -20,8 +20,11 @@ services:
       - "${PORT}:${PORT}"
     env_file:
       - .env
+    networks:
+      - servicenetwork
     depends_on:
       - db
+
   db:
     container_name: mongo-db
     image: mongo
@@ -29,11 +32,13 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-    #no output
-    logging:
-      driver: "none"
     ports:
       - "${DB_PORT}:${DB_PORT}"
+    networks:
+      - servicenetwork
 
+networks:
+  servicenetwork:
+    driver: bridge
 
 

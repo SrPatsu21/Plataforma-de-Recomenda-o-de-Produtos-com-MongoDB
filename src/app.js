@@ -4,10 +4,12 @@ const hostname = "127.0.0.1";
 const port = 3000;
 // mongo
 const { MongoClient } = require('mongodb');
-const dbAddress = `localhost`;
+const dbAddress = `db`;
+const user = `root`
+const pass = `root`
 const dbPort = 27017
 const dbName = `test`;
-const mongourl = `mongodb://${dbAddress}:${dbPort}/${dbName}`;
+const mongourl = `mongodb://${user}:${pass}@${dbAddress}:${dbPort}`;
 
 // app
 const cats = ['Garfield', 'Tom', 'Simba'];
@@ -26,22 +28,36 @@ app.get('/mongo', async(req, res) =>{
     const client = new MongoClient(mongourl);
 
     try {
+        // Connect to MongoDB server
+        await client.connect();
 
-        // Connect to the MongoDB cluster
+        console.log('Connected to MongoDB');
 
-        let test = await client.connect();
-        test.than(data =>{
-            console.log(data);
-        }
-        )
-    } catch (e) {
+        // Select the database and collection
+        const database = client.db('testdb');
+        const collection = database.collection('users');
 
-        console.error(e);
+        // Document to be inserted
+        const userDocument = {
+          name: 'John Doe',
+          age: 30,
+          email: 'johndoe@example.com',
+          createdAt: new Date(),
+        };
 
-    } finally {
+        // Insert the document into the collection
+        const result = await collection.insertOne(userDocument);
+        console.log(`Document inserted with _id: ${result.insertedId}`);
 
+        res.json("ok");
+    } catch (err)
+    {
+        res.json("fails");
+        console.error('Error inserting document:', err);
+    } finally
+    {
+        // Close the connection to the MongoDB server
         await client.close();
-
     }
 })
 
