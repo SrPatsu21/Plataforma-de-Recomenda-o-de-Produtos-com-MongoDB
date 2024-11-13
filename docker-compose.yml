@@ -12,6 +12,7 @@ services:
       - bash
       - -c
       - |
+        npm i -d
         npm run dev
     tty: true
     volumes:
