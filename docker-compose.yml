@@ -1,19 +1,45 @@
 # Use root/example as user/password credentials
 services:
-  mongo:
+  web:
+    container_name: node-web
+    image: app
+    restart: always
+    build:
+        context: .
+        dockerfile: Dockerfile
+        target: base
+    command:
+      - bash
+      - -c
+      - |
+        npm i -dev
+        npm run dev
+    tty: true
+    volumes:
+      - .:/app
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    networks:
+      - servicenetwork
+    depends_on:
+      - db
+
+  db:
+    container_name: mongo-db
     image: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  mongo-express:
-    image: mongo-express
-    restart: always
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
+      - "${DB_PORT}:${DB_PORT}"
+    networks:
+      - servicenetwork
+
+networks:
+  servicenetwork:
+    driver: bridge
+
+

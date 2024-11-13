@@ -1,0 +1,1 @@
+docker compose up --remove-orphans --build --no-attach db
