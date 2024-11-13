@@ -11,6 +11,56 @@ app.use(express.json());
 
 connectDB();
 
+//* authentication
+//https://www.geeksforgeeks.org/authentication-strategies-available-in-express/
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+// provisory users
+const users = [
+  { id: 1, username: 'user1', password: 'password1' },
+  { id: 2, username: 'user2', password: 'password2' },
+];
+
+// Local Strategy to authenticate user
+passport.use(new LocalStrategy(
+  (username, password, done) => {
+    const user = users.find(user => user.username === username);
+
+    if (!user) {
+      return done(null, false, { message: 'Incorrect username.' });
+    }
+
+    // password validation
+    if (user.password !== password) {
+      return done(null, false, { message: 'Incorrect password.' });
+    }
+    // deserialize user info from session
+    return done(null, user);
+  }
+));
+
+// serialize user info into session
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// deserialize user info from session
+passport.deserializeUser((id, done) => {
+  const user = users.find(user => user.id === id);
+  done(null, user);
+});
+
+app.use(require('express-session')({ secret: 'secret-key', resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/dashboard',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
+
 //* Products route
 const Products = require('./models/Products')
 
@@ -30,7 +80,7 @@ curl -X POST http://localhost:3000/Product \
   }'
 */
 //*
-app.post('/Product', async (req, res) => {
+app.post('/Products', async (req, res) => {
   const { name, category, tags, price, rating } = req.body;
 
   try {
@@ -51,7 +101,7 @@ app.post('/Product', async (req, res) => {
 });
 
 // select
-app.get('/Products', async (req, res) => {
+app.get('/Products', passport.authenticate('local', { session: false }), async (req, res) => {
   try {
     const products = await Products.find();
     res.status(200).json(products); // Return the list of matching products
