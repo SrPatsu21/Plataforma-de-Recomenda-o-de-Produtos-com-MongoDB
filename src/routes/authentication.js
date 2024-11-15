@@ -12,7 +12,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 
 // provisory users
-//TODO remove users
+//TODO remove provisory users
 const users = [
   { id: 1, username: 'user', passwordHash: '$2b$10$c8pCR5Z69zl/tUyEg1Nreu4FEdI/NMvxUYZWaAcsuQ8zH42kfdkSC' }, // password: 123
 ];
@@ -26,7 +26,7 @@ passport.use(new LocalStrategy(
       return done(null, false, { message: 'Incorrect username.' });
     }
 
-    // Compare password (using bcrypt)
+    // Compare password
     bcrypt.compare(password, user.passwordHash, (err, isMatch) => {
       if (err) {
         return done(err);
@@ -40,7 +40,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// to store user in the session
+// store user in the session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -51,18 +51,13 @@ passport.deserializeUser((id, done) => {
   done(null, user);
 });
 
-// const authenticat = passport.authenticate('local', {
-//   successRedirect: '/asdasdd',
-//   failureRedirect: '/login?error=true'
-// })
-
+//* middleware
 const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json({ message: 'Unauthorized' });
+  res.status(401).redirect("/login?error=true");
 };
-
 
 module.exports = {
     passport: passport,

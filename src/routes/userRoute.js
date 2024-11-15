@@ -7,8 +7,7 @@ const router = express.Router();
 
 //* display login page
 router.get('/login', (req, res) => {
-  // Render login page with any error messages
-  const error = req.query.error === 'true'; // Check if error is present in query string
+  const error = req.query.error === 'true';
   const data = { title: ''};
   res.render('login', {data, error});
 });
