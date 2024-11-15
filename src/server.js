@@ -32,11 +32,8 @@ app.set('views', path.join(__dirname, 'views'));
 * START ROUTES
 */
 //* favicon
-//TODO change this one
-// app.get('/favicon.ico',
-// (req, res) =>{
-//   res.sendFile('../views/static/favicon.ico')
-// })
+const favicon = require('serve-favicon');
+app.use(favicon(path.join(__dirname, '/views/static/favicon/favicon.ico')));
 
 //* login route
 const userRoute = require('./routes/userRoute');
