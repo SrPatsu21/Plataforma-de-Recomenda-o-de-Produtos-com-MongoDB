@@ -24,6 +24,10 @@ app.use(expressSession({ secret: 'your_secret_key', resave: false, saveUninitial
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+//* Serve css static files
+app.use(express.static(path.join(__dirname, "public")));
+
 //* views
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
