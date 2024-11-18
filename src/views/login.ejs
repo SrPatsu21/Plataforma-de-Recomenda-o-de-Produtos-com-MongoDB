@@ -3,23 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <link href="/styles.css" rel="stylesheet">
 </head>
-<body>
-  <h2>Login</h2>
-  <form action="/login" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    <button type="submit">Login</button>
-  </form>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+    <form action="/login" method="post" class="space-y-4">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          required
+          class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        >
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input 
+          type="password"
+          id="password"
+          name="password"
+          required
+          class="w-full mt-1 p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        >
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+      >
+        Login
+      </button>
+    </form>
 
-  <!-- Display error message if redirected with error query -->
-  <div>
-    <% if (error) { %>
-      <p style="color: red;">Incorrect username or password.</p>
-    <% } %>
+    <!-- Display error message if redirected with error query -->
+    <div class="mt-4">
+      <% if (error) { %>
+        <p class="text-red-500 text-sm text-center">Incorrect username or password.</p>
+      <% } %>
+    </div>
   </div>
 </body>
 </html>
