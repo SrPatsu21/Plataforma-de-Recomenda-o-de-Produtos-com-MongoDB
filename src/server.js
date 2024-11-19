@@ -29,7 +29,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
 
 //* views
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 /*
@@ -43,6 +43,11 @@ app.use(favicon(path.join(__dirname, '/views/static/favicon/favicon.ico')));
 const userRoute = require('./routes/userRoute');
 
 app.use('', userRoute);
+
+//* admin route
+const adminRoute = require('./routes/adminRoute');
+
+app.use('/admin', adminRoute)
 
 //* Products route
 const productRoute = require('./routes/productRoute');

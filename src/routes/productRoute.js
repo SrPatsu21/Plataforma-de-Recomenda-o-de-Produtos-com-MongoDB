@@ -8,8 +8,9 @@ const { isAuthenticated } = require("./authentication")
 curl -X POST http://localhost:3000/products -H "Content-Type: application/json" -d '{"name": "Sample Product", "category": "Electronics", "tags": ["new", "popular", "sale"], "price": 99.99, "rating": 4.5}'
 */
 
-// Define the routes
+//* Define the routes
 router.route('/')
+    //TODO verify adm
     .post( isAuthenticated,
     async (req, res) => {
         const { name, category, tags, price, rating } = req.body;
@@ -40,7 +41,7 @@ router.route('/')
     });
 
 // TODO this was not done yet
-router.route('/:id')
+router.route('/single/:id')
     .get((req, res) => {
       res.send(`Fetching user with ID: ${req.params.id}`);
     })

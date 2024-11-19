@@ -8,8 +8,8 @@ const router = express.Router();
 //* display login page
 router.get('/login', (req, res) => {
   const error = req.query.error === 'true';
-  const data = { title: ''};
-  res.render('login', {data, error});
+  const title = 'Login';
+  res.render('login', {title, error});
 });
 
 //* login
