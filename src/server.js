@@ -44,6 +44,11 @@ const userRoute = require('./routes/userRoute');
 
 app.use('', userRoute);
 
+//* admin route
+const adminRoute = require('./routes/adminRoute');
+
+app.use('/admin', adminRoute)
+
 //* Products route
 const productRoute = require('./routes/productRoute');
 
