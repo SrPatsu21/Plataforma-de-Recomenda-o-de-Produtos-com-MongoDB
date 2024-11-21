@@ -1,5 +1,4 @@
 const express = require('express');
-//TODO remove users and bcrypt
 const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
 const Users = require('../models/Users');
@@ -53,6 +52,8 @@ router.post('/register', async (req, res) => {
   try {
     // const { username, email, pass, lastWords, lastCategories, lastTags } = req.body;
     const { username, email, pass} = req.body;
+    const isAdmin = false;
+    const active = true;
     bcrypt.hash(pass, 10, async (err, hash) => {
       if (err) return res.status(500).json({ message: 'Error hashing password' });
       const password = hash;
@@ -60,6 +61,8 @@ router.post('/register', async (req, res) => {
         username,
         email,
         password,
+        isAdmin,
+        active,
         lastSearched: {
           // words: lastWords ? lastWords.split(',').map(word => word.trim()) : [],
           // categories: lastCategories ? lastCategories.split(',').map(cat => cat.trim()) : [],

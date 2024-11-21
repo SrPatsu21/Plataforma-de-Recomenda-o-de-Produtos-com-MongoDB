@@ -14,7 +14,7 @@ const bcrypt = require('bcrypt');
 // provisory users
 //TODO remove provisory users
 const users = [
-  { id: 1, username: 'user', passwordHash: '$2b$10$c8pCR5Z69zl/tUyEg1Nreu4FEdI/NMvxUYZWaAcsuQ8zH42kfdkSC' }, // password: 123
+  { id: 1, username: 'user', passwordHash: '$2b$10$c8pCR5Z69zl/tUyEg1Nreu4FEdI/NMvxUYZWaAcsuQ8zH42kfdkSC', isAdmin: true }, // password: 123
 ];
 
 // Local Strategy to authenticate user
@@ -59,8 +59,15 @@ const isAuthenticated = (req, res, next) => {
   res.status(401).redirect("/login?error=true");
 };
 
+const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.isAdmin) {
+      return next();
+  }
+  res.status(403).send('Access Denied: Admins Only');
+};
+
 module.exports = {
     passport: passport,
     isAuthenticated: isAuthenticated,
-    users: users
+    isAdmin: isAdmin
 }

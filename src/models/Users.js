@@ -34,6 +34,16 @@ const userSchema = new Schema(
       minlength: 8,
       description: "must be a string, at least 8 characters, and is required",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false, // Default is non-admin user
+      description: "Indicates if the user is an admin",
+    },
+    active: {
+      type: Boolean,
+      default: true, // Default is active user
+      description: "Indicates if the user account is active",
+    },
     lastSearched: {
       words: {
         type: [String], // Array of strings for words
