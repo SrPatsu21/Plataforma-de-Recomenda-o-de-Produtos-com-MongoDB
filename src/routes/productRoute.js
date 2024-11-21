@@ -30,7 +30,7 @@ router.route('/')
         }
     })
     .get(isAuthenticated,
-    async (req, res) => {
+      async (req, res) => {
         try {
         const products = await Products.find();
         res.status(200).json(products); // Return the list of matching products

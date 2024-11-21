@@ -1,19 +1,18 @@
 const express = require('express');
 //TODO remove users and bcrypt
-const {passport, users} = require('./authentication');
+const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
 const Users = require('../models/Users');
 
 const router = express.Router();
 
-//* display login page
+//* login
 router.get('/login', (req, res) => {
   const error = req.query.error === 'true';
   const title = 'Login';
-  res.render('login', {title, error});
+  res.render('./user/login', {title, error});
 });
 
-//* login
 //TODO redirect to main page
 router.post('/login',
   (req, res, next) => {
@@ -42,11 +41,18 @@ router.get('/logout', (req, res) => {
 //* Route to register user, just for test
 /*
 *
-curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"username": "user", "password": "123"}'
+curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"username": "user", "email@hotmail.com", "password": "12345678"}'
 */
+router.get('/register', (req, res) =>{
+  const title = 'Register User';
+  const post_destiny = '/register/';
+  res.render('./user/register', {title, post_destiny},);
+})
+
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, pass, lastWords, lastCategories, lastTags } = req.body;
+    // const { username, email, pass, lastWords, lastCategories, lastTags } = req.body;
+    const { username, email, pass} = req.body;
     bcrypt.hash(pass, 10, async (err, hash) => {
       if (err) return res.status(500).json({ message: 'Error hashing password' });
       const password = hash;
@@ -55,14 +61,14 @@ router.post('/register', async (req, res) => {
         email,
         password,
         lastSearched: {
-          words: lastWords ? lastWords.split(',').map(word => word.trim()) : [],
-          categories: lastCategories ? lastCategories.split(',').map(cat => cat.trim()) : [],
-          tags: lastTags ? lastTags.split(',').map(tag => tag.trim()) : [],
+          // words: lastWords ? lastWords.split(',').map(word => word.trim()) : [],
+          // categories: lastCategories ? lastCategories.split(',').map(cat => cat.trim()) : [],
+          // tags: lastTags ? lastTags.split(',').map(tag => tag.trim()) : [],
         },
       });
 
       await user.save();
-      res.redirect('/success');
+      res.redirect('/login');
     });
   } catch (err) {
     res.status(400).send(err.message);
