@@ -2,6 +2,7 @@ const express = require('express');
 //TODO remove users and bcrypt
 const {passport, users} = require('./authentication');
 const bcrypt = require('bcrypt');
+const Users = require('../models/Users');
 
 const router = express.Router();
 
@@ -43,28 +44,29 @@ router.get('/logout', (req, res) => {
 *
 curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"username": "user", "password": "123"}'
 */
-router.post('/register', (req, res) => {
-  const { username, password } = req.body;
+router.post('/register', async (req, res) => {
+  try {
+    const { username, email, pass, lastWords, lastCategories, lastTags } = req.body;
+    bcrypt.hash(pass, 10, async (err, hash) => {
+      if (err) return res.status(500).json({ message: 'Error hashing password' });
+      const password = hash;
+      const user = new Users({
+        username,
+        email,
+        password,
+        lastSearched: {
+          words: lastWords ? lastWords.split(',').map(word => word.trim()) : [],
+          categories: lastCategories ? lastCategories.split(',').map(cat => cat.trim()) : [],
+          tags: lastTags ? lastTags.split(',').map(tag => tag.trim()) : [],
+        },
+      });
 
-  // Check if the username already exists
-  if (users.find(user => user.username === username)) {
-    return res.status(400).json({ message: 'Username already taken' });
+      await user.save();
+      res.redirect('/success');
+    });
+  } catch (err) {
+    res.status(400).send(err.message);
   }
-
-  // Hash the password before saving
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) return res.status(500).json({ message: 'Error hashing password' });
-
-    // Save the new user
-    const newUser = {
-      id: users.length + 1,
-      username,
-      passwordHash: hash,
-    };
-    users.push(newUser);
-
-    res.json({ message: 'User registered successfully', passwordHash: hash });
-  });
 });
 
 module.exports = router;
