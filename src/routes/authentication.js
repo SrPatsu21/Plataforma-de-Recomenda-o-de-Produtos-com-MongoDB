@@ -10,14 +10,14 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const User = require('../models/Users');
+const Users = require('../models/Users');
 
 
 // Local Strategy to authenticate user
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     // Find user by username
-    const user = await User.findOne({ username: username });
+    const user = await Users.findOne({ username: username });
     if (!user) {
       return done(null, false, { message: 'Incorrect username.' });
     }
@@ -43,7 +43,7 @@ passport.serializeUser((user, done) => {
 
 // deserialize user info from session
 passport.deserializeUser((id, done) => {
-  const user = users.find(user => user.id === id);
+  const user = Users.find(user => user.id === id);
   done(null, user);
 });
 
