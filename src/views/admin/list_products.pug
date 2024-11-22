@@ -1,0 +1,26 @@
+extends layout_adm.pug
+block content
+    div(class="lg:w-8/12")
+        h1(class="text-2xl font-bold mb-6 text-center") List Products
+        div(id="productlist" class="grid md:grid-cols-3 gap-4")
+            each product in products
+                div.container.mx-auto.p-4
+                    div.bg-white.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto
+                        img.w-full(href="#product-img" src=`${product.img_url}` alt="Product Image")
+                        div.p-4
+                        .p-4
+                            h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
+                            p.text-sm.text-gray-600.mb-2 Category:
+                                span.text-blue-600.font-semibold #{product.category}
+                            div.flex.flex-wrap.gap-2.mb-4
+                                each tag in product.tags
+                                    span.inline-block.bg-gray-200.text-gray-700.text-xs.px-2.py-1.rounded-full #{tag}
+                            div.flex.items-center.justify-between.mb-4
+                                span.text-xl.font-bold.text-gray-800 $#{product.price}
+                                div.flex.items-center
+                                span.text-gray-600.text-sm ★ (#{product.rating})
+                            div.flex.flex-wrap.justify-between
+                                form(action="/products/" method="DELETE" class="space-y-4 w-6/12 flex justify-center")
+                                    button(type="submit" class="text-center bg-blue-600.text-white.py-2.px-4.rounded-lg.hover:bg-blue-500.transition-all.duration-300") Remove
+                                form(action="/edit_products/" method="GET" class="space-y-4 w-6/12 flex justify-center")
+                                    button(type="submit" class="text-center bg-blue-600.text-white.py-2.px-4.rounded-lg.hover:bg-blue-500.transition-all.duration-300") Edit

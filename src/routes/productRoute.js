@@ -13,10 +13,11 @@ router.route('/')
     //TODO verify adm
     .post( isAdmin,
     async (req, res) => {
-        const { name, category, tags, price, rating } = req.body;
+        const { name, img_url, category, tags, price, rating } = req.body;
         try {
         const newProduct = new Products({
             name,
+            img_url,
             category,
             tags,
             price,
@@ -32,7 +33,7 @@ router.route('/')
     .get(isAdmin,
       async (req, res) => {
         try {
-        const products = await Products.find();
+        const products = await Products.find();//.limit(10);
         res.status(200).json(products); // Return the list of matching products
         } catch (err) {
         console.error(err);

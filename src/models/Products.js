@@ -15,6 +15,13 @@ const productSchema = new Schema(
       trim: true,
       description: "must be a string and is required",
     },
+    img_url: {
+      type: "string",
+      required: true,
+      default: "https://via.placeholder.com/400",
+      trim: true,
+      description: "must be a string and is required",
+    },
     category: {
       type: "string",
       required: true,
