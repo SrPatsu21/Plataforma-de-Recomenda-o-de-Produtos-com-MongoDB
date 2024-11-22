@@ -10,24 +10,20 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+const User = require('../models/Users');
 
-// provisory users
-//TODO remove provisory users
-const users = [
-  { id: 1, username: 'user', passwordHash: '$2b$10$c8pCR5Z69zl/tUyEg1Nreu4FEdI/NMvxUYZWaAcsuQ8zH42kfdkSC', isAdmin: true }, // password: 123
-];
 
 // Local Strategy to authenticate user
 passport.use(new LocalStrategy(
-  (username, password, done) => {
+  async (username, password, done) => {
     // Find user by username
-    const user = users.find(user => user.username === username);
+    const user = await User.findOne({ username: username });
     if (!user) {
       return done(null, false, { message: 'Incorrect username.' });
     }
 
     // Compare password
-    bcrypt.compare(password, user.passwordHash, (err, isMatch) => {
+    bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
         return done(err);
       }

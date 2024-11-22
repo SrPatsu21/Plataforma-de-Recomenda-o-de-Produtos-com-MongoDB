@@ -55,6 +55,11 @@ const productRoute = require('./routes/productRoute');
 
 app.use('/products', productRoute);
 
+//* seeder
+const seederRoute = require('./routes/seederRoute');
+
+app.use('/seeder', seederRoute);
+
 //* server loop
 app.listen(port, () => {
   console.log(
