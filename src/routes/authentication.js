@@ -42,8 +42,8 @@ passport.serializeUser((user, done) => {
 });
 
 // deserialize user info from session
-passport.deserializeUser((id, done) => {
-  const user = Users.find(user => user.id === id);
+passport.deserializeUser(async(id, done) => {
+  const user = await Users.findOne({ _id: id });
   done(null, user);
 });
 
