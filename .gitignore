@@ -2,3 +2,5 @@
 node_modules
 src/public/styles.css
 src/public
+cert/magazinematheus.dev.key
+cert/magazinematheus.dev.crt
