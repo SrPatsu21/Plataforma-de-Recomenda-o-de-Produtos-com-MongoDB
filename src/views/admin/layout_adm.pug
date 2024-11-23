@@ -5,5 +5,47 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(href="/styles.css" rel="stylesheet")
     title #{title}
-  body(class="bg-gray-100 flex items-center justify-center min-h-screen")
-  block content
+  body()
+    nav.bg-gray-800
+      div(class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8")
+        .flex.h-16.items-center.justify-between
+          //- Logo
+          .flex.items-center
+            a(href="/admin", class="text-white text-xl font-bold") Admin Panel
+
+          //- Navigation Links (Hidden on mobile)
+          div(class="hidden md:flex space-x-4")
+            a(href="/admin/register_product", class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium") Producst
+            a(href="#", class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium") Users
+            a(href="#", class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium") -
+
+          //- Right Side Profile
+          .flex.items-center.space-x-4
+            .relative
+              a(href="/logout")
+                button(id="dropdown-btn" class="flex items-center text-sm bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none") Logout
+
+          //- Mobile Menu Button
+          div(class="md:hidden flex items-center")
+            button(id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500")
+              svg.h-6.w-6(xmlns="http://www.w3.org/2000/svg", fill="none", viewBox="0 0 24 24", stroke="currentColor")
+                path(stroke-linecap="round", stroke-linejoin="round", stroke-width="2", d="M4 6h16M4 12h16M4 18h16")
+
+      //- Mobile Menu
+      div(id="mobile-menu" class="md:hidden" style="display: none;")
+        .space-y-1.px-2.pt-2.pb-3
+          a(href="#", class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium") Dashboard
+          a(href="#", class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium") Users
+          a(href="#", class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium") Settings
+  main(class="bg-gray-100 flex items-center justify-center min-h-screen")
+    block content
+
+  footer
+
+  script.
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
+    });
+  block nestedJS
+

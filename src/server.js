@@ -1,5 +1,4 @@
 const express = require("express");
-const connectDB = require("./db");
 const path = require("path");
 const https = require("https");
 const fs = require("fs");
@@ -12,6 +11,8 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
+//* db connection
+const connectDB = require('./db');
 connectDB();
 
 //? Middleware setup
@@ -59,7 +60,12 @@ app.use("/admin", adminRoute);
 //* Products route
 const productRoute = require("./routes/productRoute");
 
-app.use("/products", productRoute);
+app.use('/products', productRoute);
+
+//* seeder
+const seederRoute = require('./routes/seederRoute');
+
+app.use('/seeder', seederRoute);
 
 //* https
 const sslServer = https.createServer(

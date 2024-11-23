@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Products = require('../models/Products')
-const { isAuthenticated } = require("./authentication")
+const { isAuthenticated, isAdmin } = require("./authentication")
 
 /*
 *
@@ -11,7 +11,7 @@ curl -X POST http://localhost:3000/products -H "Content-Type: application/json" 
 //* Define the routes
 router.route('/')
     //TODO verify adm
-    .post( isAuthenticated,
+    .post( isAdmin,
     async (req, res) => {
         const { name, category, tags, price, rating } = req.body;
         try {
@@ -29,8 +29,8 @@ router.route('/')
         res.status(500).send('Server error');
         }
     })
-    .get(isAuthenticated,
-    async (req, res) => {
+    .get(isAdmin,
+      async (req, res) => {
         try {
         const products = await Products.find();
         res.status(200).json(products); // Return the list of matching products

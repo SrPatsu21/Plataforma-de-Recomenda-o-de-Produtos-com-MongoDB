@@ -10,24 +10,20 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+const Users = require('../models/Users');
 
-// provisory users
-//TODO remove provisory users
-const users = [
-  { id: 1, username: 'user', passwordHash: '$2b$10$c8pCR5Z69zl/tUyEg1Nreu4FEdI/NMvxUYZWaAcsuQ8zH42kfdkSC' }, // password: 123
-];
 
 // Local Strategy to authenticate user
 passport.use(new LocalStrategy(
-  (username, password, done) => {
+  async (username, password, done) => {
     // Find user by username
-    const user = users.find(user => user.username === username);
+    const user = await Users.findOne({ username: username });
     if (!user) {
       return done(null, false, { message: 'Incorrect username.' });
     }
 
     // Compare password
-    bcrypt.compare(password, user.passwordHash, (err, isMatch) => {
+    bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
         return done(err);
       }
@@ -46,8 +42,8 @@ passport.serializeUser((user, done) => {
 });
 
 // deserialize user info from session
-passport.deserializeUser((id, done) => {
-  const user = users.find(user => user.id === id);
+passport.deserializeUser(async(id, done) => {
+  const user = await Users.findOne({ _id: id });
   done(null, user);
 });
 
@@ -59,8 +55,15 @@ const isAuthenticated = (req, res, next) => {
   res.status(401).redirect("/login?error=true");
 };
 
+const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.isAdmin) {
+      return next();
+  }
+  res.status(403).send('Access Denied: Admins Only');
+};
+
 module.exports = {
     passport: passport,
     isAuthenticated: isAuthenticated,
-    users: users
+    isAdmin: isAdmin
 }
