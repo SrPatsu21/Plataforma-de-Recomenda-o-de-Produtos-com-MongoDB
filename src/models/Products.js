@@ -56,6 +56,12 @@ const productSchema = new Schema(
         message: props => `${props.value} is not a valid rating!`,
       },
     },
+    timesPurchased: {
+      type: Number,
+      default: 0,
+      min: 0, // Enforces non-negative values
+      description: "Tracks how many times the product has been purchased",
+    },
     active: {
       type: Boolean,
       default: true, // Default is active user

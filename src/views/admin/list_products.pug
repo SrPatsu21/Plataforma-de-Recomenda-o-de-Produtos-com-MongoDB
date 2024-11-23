@@ -31,6 +31,8 @@ block content
                                 span.text-xl.font-bold.text-gray-800 $#{product.price}
                                 div.flex.items-center
                                 span.text-gray-600.text-sm ★ (#{product.rating})
+                            div.flex.items-center.justify-between.mb-4
+                                span.text-blue-500.text-sm sales: #{product.timesPurchased}
                             div.flex.flex-wrap.justify-between.px-2
                                 button(type="button" onclick=`deleteProduct('${product._id}')` class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2") Remove
                                 button(type="button" onclick=`redirectToEditProduct('${product._id}')` class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2") Edit
