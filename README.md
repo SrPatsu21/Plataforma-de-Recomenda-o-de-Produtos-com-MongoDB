@@ -4,7 +4,12 @@
 
 - first time
 
-    docker compose up --remove-orphans --build --no-attach db
+    ``` shell
+        docker compose up --remove-orphans --build --no-attach db
+    ```
+
 - after run the fist time
 
-    docker compose up --remove-orphans --no-attach db
+    ``` shell
+        docker compose up --remove-orphans --no-attach db
+    ```

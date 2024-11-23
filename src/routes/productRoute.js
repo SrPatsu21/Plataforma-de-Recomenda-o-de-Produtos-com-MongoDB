@@ -10,10 +10,10 @@ curl -X POST http://localhost:3000/products -H "Content-Type: application/json" 
 
 //* Define the routes
 router.route('/')
-    //TODO verify adm
     .post( isAdmin,
     async (req, res) => {
         const { name, img_url, category, tags, price, rating } = req.body;
+        const active = true
         try {
         const newProduct = new Products({
             name,
@@ -21,7 +21,8 @@ router.route('/')
             category,
             tags,
             price,
-            rating
+            rating,
+            active
         });
         await newProduct.save();
         res.status(201).json(newProduct); // Return the newly created Product
@@ -33,7 +34,18 @@ router.route('/')
     .get(isAdmin,
       async (req, res) => {
         try {
-        const products = await Products.find();//.limit(10);
+          const { name, tag, category } = req.query;
+          const query = {};
+          if (name) {
+              query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+          }
+          if (tag) {
+              query.tags = { $in: [tag] }; // Tag must be in the product's tags array
+          }
+          if (category) {
+              query.category = { $regex: category, $options: 'i' }; // Case-insensitive search
+          }
+          const products = await Products.find(query);
         res.status(200).json(products); // Return the list of matching products
         } catch (err) {
         console.error(err);
@@ -41,16 +53,30 @@ router.route('/')
         }
     });
 
-// TODO this was not done yet
-router.route('/single/:id')
-    .get((req, res) => {
-      res.send(`Fetching user with ID: ${req.params.id}`);
+router.route('/:id')
+    .get(isAuthenticated, (req, res) => {
+      res.send(`Fetching ID: ${req.params.id}`);
     })
-    .put((req, res) => {
-      res.send(`Updating user with ID: ${req.params.id}`);
+    .put(isAdmin, (req, res) => {
+      res.send(`Updating ID: ${req.params.id}`);
     })
-    .delete((req, res) => {
-      res.send(`Deleting user with ID: ${req.params.id}`);
+    .delete(isAdmin, async (req, res) => {
+      try{
+        const product = await Products.findByIdAndUpdate(req.params.id,
+          {active:false, updatedAt:null}
+          ,
+          { new: true, runValidators: true, overwrite: true }
+        );
+        if (!product) {
+          return res.status(404).json({ error: "Product not found" });
+        }
+
+        res.status(200).json(product);
+      }
+      catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     });
 
 module.exports = router;

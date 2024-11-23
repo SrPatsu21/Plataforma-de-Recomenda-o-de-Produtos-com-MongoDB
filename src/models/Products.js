@@ -55,6 +55,11 @@ const productSchema = new Schema(
         },
         message: props => `${props.value} is not a valid rating!`,
       },
+    },
+    active: {
+      type: Boolean,
+      default: true, // Default is active user
+      description: "Indicates if the user account is active",
     }
   },
   {
