@@ -9,6 +9,12 @@ const router = express.Router();
 router.get('/', isAuthenticated, (req, res) => {
   const title = "Home";
   res.render("./user/layout_user.pug", {title},);
+});
+
+//* profile user page
+router.get('/profile', isAuthenticated, (req, res) => {
+  const title = "Profile";
+  res.render("./user/profile.pug", {title},);
 })
 
 //* login
