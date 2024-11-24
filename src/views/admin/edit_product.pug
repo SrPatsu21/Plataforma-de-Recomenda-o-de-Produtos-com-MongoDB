@@ -1,23 +1,87 @@
 extends layout_adm.pug
+block nestHead
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js")
 block content
-    div(class="w-full bg-white p-8 rounded shadow-md max-w-md")
-        h1(class="text-2xl font-bold mb-6 text-center") Add a New Product
-        form(action=`${post_destiny}` enctype="multipart/form-data" method="POST" class="space-y-4 w-full")
+    div(class="w-full bg-white p-8 rounded shadow-md max-w-md mt-12")
+        h1(class="text-2xl font-bold mb-6 text-center") Edit a Product
+        //- form(id="edit_form" enctype="multipart/form-data" method="POST" class="space-y-4 w-full")
+        form(action=`${post_destiny}` id="edit_form" enctype="multipart/form-data" method="POST" class="space-y-4 w-full")
+            input(type="hidden" id="id" name="id" value=`${product._id}`)
             div
             label(for="name" class="block text-sm font-medium text-gray-700") Name:
-            input(type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="text" id="name" name="name" value=`${product.name}` required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
             label(for="category" class="block text-sm font-medium text-gray-700") Category:
-            input(type="text" id="category" name="category" required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="text" id="category" name="category" value=`${product.category}` required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             //- TODO tags need to be fix
             div
             label(for="tags" class="block text-sm font-medium text-gray-700") Tags (comma-separated):
-            input(type="text" id="tags" name="tags" class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="text" id="tags" name="tags" value=`${product.tags}` class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
             label(for="price" class="block text-sm font-medium text-gray-700") Price:
-            input(type="number" step="0.01" id="price" name="price" required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="number" step="0.01" id="price" name="price" value=`${product.price}` required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
+            label(for="img_url" class="block text-sm font-medium text-gray-700") Old image:
+            input(type="hidden" id="img_id" name="img_id" value=`${product.img_id}`)
+            img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
+
             label(for="img_url" class="block text-sm font-medium text-gray-700") Image:
-            input(type="file" id="image" name="image" accept="image/*" required class="mt-1 block w-full px-3 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="file" id="image" name="image" accept="image/png" class="mt-1 block w-full px-3 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
-            button(type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500") Add Product
+            button(type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500") Save Product
+            //- button(type="button" onclick=`updateProduct('${product._id}')` class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500") Save Product
+            a(href="/admin/list_products")
+                button(type="button" class="w-full bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mt-4") Back
+
+block nestedJS
+    //- script.
+    //-     function updateProduct(productId) {
+    //-         // Confirm with the user before proceeding
+    //-         if (window.confirm('Are you sure you want to edit this product?')) {
+    //-             const form = document.getElementById('edit_form'); // Get the form element
+    //-             const formData = new FormData(form); // Create a FormData object
+    //-             const imagefile = document.getElementById('image');
+    //-             formData.append("image", imagefile.files[0]);
+
+    //-             // Log FormData keys and values for debugging (optional)
+    //-             //- for (let [key, value] of formData.entries()) {
+    //-             //-     console.log(`${key}:`, value);
+    //-             //- }
+
+    //-             // Convert FormData entries to a plain object (optional)
+    //-             const data = Object.fromEntries(formData.entries());
+    //-             console.log(data)
+
+    //-             fetch(`/admin/edit_product/${productId}`, {
+    //-                 method: 'PUT',
+    //-                 //- headers: {
+    //-                 //-     'Content-Type': 'multipart/form-data'
+    //-                 //- },
+    //-                 body: data
+    //-             })
+    //-                 .then(response => response.json())
+    //-                 .then(data => {
+    //-                     alert('Product edited successfully!');
+    //-                     // - console.log(data);
+    //-                     // - window.location.href = '/admin/list_products';
+    //-                 })
+    //-                 .catch(error => {
+    //-                     console.log('Error editing the product:', error);
+    //-                     alert('Failed to edit the product. Please try again later.');
+    //-                 });
+
+    //-             //- axios.put(`/admin/edit_product/${productId}`,
+    //-             //-     data,
+    //-             //-     {headers: {'Content-Type': 'multipart/form-data'}}
+    //-             //- )
+    //-             //-     .then(response => {
+    //-             //-         alert('Product edit successfully!');
+    //-             //-         //- console.log(response.data);
+    //-             //-         //- window.location.href= '/admin/list_products';
+    //-             //-     })
+    //-             //-     .catch(error => {
+    //-             //-         console.log('Error editing the product:', error);
+    //-             //-         alert('Failed to edit the product. Please try again later.');
+    //-             //-     });
+    //-         }
+    //-     }

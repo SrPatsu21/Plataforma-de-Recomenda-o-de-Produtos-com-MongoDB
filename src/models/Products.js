@@ -18,7 +18,7 @@ const productSchema = new Schema(
     img_id: {
       type: "string",
       required: true,
-      // default: "https://via.placeholder.com/400",
+      default: "0",
       trim: true,
       description: "must be a string and is required",
     },
@@ -95,15 +95,16 @@ const createProduct = async (req, res, next) => {
     // This will be available in the next middleware
     req.product = newProduct;
     next();
-  } catch (err) {
-    console.error('Error creating product:', err);
-    next(err);
+  } catch (error) {
+    console.error('Error creating product:', error);
+    next(error);
   }
 };
 //* search
 const searchProduct = async (req, res, next) => {
   try {
     const { name, tag, category } = req.query;
+    const limit = req.limit || 50;
     const query = {};
     if (name) {
         query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
@@ -114,12 +115,12 @@ const searchProduct = async (req, res, next) => {
     if (category) {
         query.category = { $regex: category, $options: 'i' }; // Case-insensitive search
     }
-    const products = await Products.find(query);
+    const products = await Products.find(query).limit(limit);
     req.products = products; // Return the list of matching products
     next()
-  } catch (err) {
-    console.error(err);
-    next(err);
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 };
 //* get by id
@@ -134,7 +135,7 @@ const getProductById = async (req, res, next) => {
   }
   catch (error) {
     console.error(error);
-    next(err);
+    next(error);
   }
 }
 
@@ -151,9 +152,36 @@ const deleteProduct = async (req, res, next) => {
   }
   catch (error) {
     console.error(error);
-    next(err);
+    next(error);
   }
 }
+//* update by post
+const updateProduct = async (req, res, next) => {
+  const { name, category, tags, price} = req.body;
+  const img_id = req.img_id
+  const active = true
+  const rating = 0;
+  try {
+    const product = await Products.findByIdAndUpdate(req.body.id,
+      {
+        name,
+        img_id,
+        category,
+        tags,
+        price,
+        rating,
+        active
+      },
+      { new: true, runValidators: true, overwrite: true }
+    );
+    // This will be available in the next middleware
+    req.product = product;
+    next();
+  } catch (error) {
+    console.error('Error creating product:', error);
+    next(error);
+  }
+};
 
 // Export the model
 module.exports = {
@@ -161,5 +189,6 @@ module.exports = {
     createProduct: createProduct,
     searchProduct: searchProduct,
     getProductById: getProductById,
-    deleteProduct: deleteProduct
+    deleteProduct: deleteProduct,
+    updateProduct: updateProduct,
   };

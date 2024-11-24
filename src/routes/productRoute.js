@@ -24,6 +24,7 @@ router.route('/:id')
     .get(isAuthenticated, getProductById,(req, res) => {
       res.status(200).json(req.product);
     })
+    //TODO not updating
     .put(isAdmin, (req, res) => {
       res.send(`Updating ID: ${req.params.id}`);
     })

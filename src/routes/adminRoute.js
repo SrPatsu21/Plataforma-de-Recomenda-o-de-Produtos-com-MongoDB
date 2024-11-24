@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { isAdmin } = require("./authentication")
-const {createProduct, searchProduct, deleteProduct} = require('../models/Products')
-const {uploadImage} = require('../models/Images');
+const {createProduct, searchProduct, deleteProduct, getProductById, updateProduct} = require('../models/Products')
+const {uploadImage, updateImage} = require('../models/Images');
 require("dotenv").config();
 
 //* get admin page html
@@ -42,15 +42,21 @@ router.get('/list_products', isAdmin, searchProduct, (req, res) =>{
 })
 
 //* delete product
+//soft delete, img not deleted too
 router.delete('/product/:id', isAdmin, deleteProduct, (req, res) =>{
   res.status(200).send(req.product)
 })
 
 //* update
-router.get('/edit_product/:id', isAdmin, (req, res) =>{
+router.get('/edit_product/:id', isAdmin, getProductById, (req, res) =>{
+  const product = req.product;
   const title = 'Edit Product';
-  const put_destiny = '/admin/register_product/';
-  res.render('./admin/edit_product', {title, put_destiny},);
+  const post_destiny = '/admin/edit_product/';
+  res.render('./admin/edit_product', {title, post_destiny, product},);
 });
+
+router.post('/edit_product', isAdmin, upload.single('image'), updateImage, updateProduct,  (req, res) =>{
+  res.status(200).send(req.product);
+})
 
 module.exports = router;

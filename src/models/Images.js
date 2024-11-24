@@ -49,8 +49,66 @@ const uploadImage = async (req, res, next) => {
         next(error);
     }
 };
-// Export the model
+
+//* delete
+const deleteImage = async (req, res, next) => {
+    try{
+        const image = await Image.findByIdAndDelete(req.params.delete_img_id);
+        req.image = image;
+        next()
+    }
+    catch (error) {
+        console.error(error);
+        next(error);
+    }
+}// Export the model
+
+//*update
+const updateImage = async (req, res, next) => {
+    if (req.file)
+    {
+        try {
+            const { name } = req.body;
+            const imageFile = req.file;
+
+            if (!imageFile) {
+                return res.status(400).send({ error: "No file uploaded" });
+            }
+
+            // Save image in MongoDB
+            const newImage = new Image({
+                name,
+                img: {
+                    data: imageFile.buffer,
+                    contentType: imageFile.mimetype,
+                },
+            });
+
+            await newImage.save();
+            //* delete last
+            try{
+                await Image.findByIdAndDelete(req.body.img_id);
+            } catch
+            {
+
+            }
+            //* save id
+            req.img_id = newImage._id;
+            next();
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            next(error);
+        }
+    }
+    else{
+        next();
+    }
+};
+
 module.exports = {
     Image: Image,
-    uploadImage: uploadImage
+    uploadImage: uploadImage,
+    deleteImage: deleteImage,
+    updateImage: updateImage
 }
+
