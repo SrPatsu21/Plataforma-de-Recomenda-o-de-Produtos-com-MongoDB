@@ -15,10 +15,10 @@ const productSchema = new Schema(
       trim: true,
       description: "must be a string and is required",
     },
-    img_url: {
+    img_id: {
       type: "string",
       required: true,
-      default: "https://via.placeholder.com/400",
+      // default: "https://via.placeholder.com/400",
       trim: true,
       description: "must be a string and is required",
     },
@@ -77,14 +77,14 @@ const Products = mongoose.model('Products', productSchema);
 
 //* create
 const createProduct = async (req, res, next) => {
-  const { name, image, category, tags, price} = req.body;
+  const { name, category, tags, price} = req.body;
+  const img_id = req.img_id
   const active = true
-  const img_url = "https://via.placeholder.com/400";
   const rating = 0;
   try {
     const newProduct = new Products({
         name,
-        img_url,
+        img_id,
         category,
         tags,
         price,
@@ -154,7 +154,6 @@ const deleteProduct = async (req, res, next) => {
     next(err);
   }
 }
-
 
 // Export the model
 module.exports = {

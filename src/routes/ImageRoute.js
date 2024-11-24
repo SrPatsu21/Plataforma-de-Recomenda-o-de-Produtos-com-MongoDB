@@ -1,40 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { isAuthenticated } = require("./authentication")
 
-const multer = require('multer');
-const fs = require('fs');
-const Image = require('../models/Images');
-
-const upload = multer({ dest: '../uploads/' }); // folder to store uploads
+const {Image} = require('../models/Images');
 
 // Route to handle image upload
-router.post('/upload', upload.single('image'), async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const file = req.file;
+    // Get the image by its ObjectId
+    const image = await Image.findById(req.params.id);
 
-    if (!file) {
-      return res.status(400).send('No file uploaded.');
+    // Check if the image exists
+    if (!image) {
+        return res.status(404).send('Image not found.');
     }
 
-    // Save the image to MongoDB
-    const newImage = new Image({
-      name: file.originalname,
-      img: {
-        data: fs.readFileSync(file.path),
-        contentType: file.mimetype,
-      },
-    });
-
-    await newImage.save();
-
-    // Clean up the temp file
-    fs.unlinkSync(file.path);
-
-    res.status(200).send('Image uploaded and saved successfully!');
+    // Set the content type (e.g., 'image/jpeg') and send the image buffer
+    res.setHeader('Content-Type', image.img.contentType || 'application/octet-stream');
+    res.send(image.img.data);
   } catch (err) {
-    console.error(err);
-    res.status(500).send('An error occurred while uploading the image.');
+      // console.error(err);
+      res.status(500).send('Error retrieving the image.');
   }
 });
 

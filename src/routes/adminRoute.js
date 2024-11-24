@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { isAdmin } = require("./authentication")
 const {createProduct, searchProduct, deleteProduct} = require('../models/Products')
+const {uploadImage} = require('../models/Images');
 require("dotenv").config();
 
 //* get admin page html
@@ -17,11 +18,8 @@ router.get('/register_product', isAdmin, (req, res) =>{
     res.render('./admin/create_product', {title, post_destiny},);
   });
 
-router.post('/register_product', isAdmin, createProduct,
-  (err, req, res) => {
-    if(err){
-      res.status(500).send('Server error');
-    }
+router.post('/register_product', isAdmin, uploadImage, createProduct,
+  (req, res) => {
     res.status(201).redirect('/admin/list_products'); // Return to list
   });
 
@@ -29,15 +27,16 @@ router.post('/register_product', isAdmin, createProduct,
 router.get('/list_products', isAdmin, searchProduct, (req, res) =>{
   const title = 'List Products';
   let { name, tag, category } = req.query;
+  const img_url = 'https://127.0.0.1:3000/image/'
   if(!name){name = ""};
   if(!tag){tag = ""};
   if(!category){category = ""};
   const products = req.products;
-  res.render('./admin/list_products', {title, products, name, tag, category},);
+  res.render('./admin/list_products', {title, products, name, tag, category, img_url},);
 })
 
 //* delete product
-router.delete('/product/:id', isAdmin, deleteProduct, async(req, res) =>{
+router.delete('/product/:id', isAdmin, deleteProduct, (req, res) =>{
   res.status(200).send(req.product)
 })
 
