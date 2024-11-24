@@ -55,8 +55,9 @@ router.get('/edit_product/:id', isAdmin, getProductById, (req, res) =>{
   res.render('./admin/edit_product', {title, post_destiny, product},);
 });
 
+//? post because the image that need to be uploaded and i dont know why dont work with put
 router.post('/edit_product', isAdmin, upload.single('image'), updateImage, updateProduct,  (req, res) =>{
-  res.status(200).send(req.product);
+  res.status(200).redirect('/admin/list_products');
 })
 
 module.exports = router;

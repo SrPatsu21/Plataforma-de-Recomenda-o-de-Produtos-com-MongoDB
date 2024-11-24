@@ -159,8 +159,10 @@ const deleteProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   const { name, category, tags, price} = req.body;
   const img_id = req.img_id
-  const active = true
-  const rating = 0;
+  let active = false;
+  if (req.body.active == "on"){
+    active = true
+  }
   try {
     const product = await Products.findByIdAndUpdate(req.body.id,
       {
@@ -169,7 +171,6 @@ const updateProduct = async (req, res, next) => {
         category,
         tags,
         price,
-        rating,
         active
       },
       { new: true, runValidators: true, overwrite: true }
