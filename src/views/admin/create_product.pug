@@ -5,22 +5,19 @@ block content
         form(action=`${post_destiny}` method="POST" class="space-y-4 w-full")
             div
             label(for="name" class="block text-sm font-medium text-gray-700") Name:
-            input(type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
-            div
-            label(for="img_url" class="block text-sm font-medium text-gray-700") Image URI:
-            input(type="text" id="img_url" name="img_url" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
             label(for="category" class="block text-sm font-medium text-gray-700") Category:
-            input(type="text" id="category" name="category" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="text" id="category" name="category" required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             //- TODO tags need to be fix
             div
             label(for="tags" class="block text-sm font-medium text-gray-700") Tags (comma-separated):
-            input(type="text" id="tags" name="tags" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="text" id="tags" name="tags" class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
             label(for="price" class="block text-sm font-medium text-gray-700") Price:
-            input(type="number" step="0.01" id="price" name="price" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            input(type="number" step="0.01" id="price" name="price" required class="mt-1 block w-full px-3 py-2 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
-            label(for="rating" class="block text-sm font-medium text-gray-700") Rating:
-            input(type="number" step="0.1" min="0" max="5" id="rating" name="rating" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
+            label(for="img_url" class="block text-sm font-medium text-gray-700") Image:
+            input(type="file" id="image" name="image" accept="image/*" required class="mt-1 block w-full px-3 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm")
             div
             button(type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500") Add Product

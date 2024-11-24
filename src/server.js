@@ -62,6 +62,11 @@ const productRoute = require("./routes/productRoute");
 
 app.use('/products', productRoute);
 
+//* image route
+const imageRoute = require("./routes/ImageRoute");
+
+app.use('images', imageRoute);
+
 //* seeder
 const seederRoute = require('./routes/seederRoute');
 

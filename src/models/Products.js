@@ -73,7 +73,94 @@ const productSchema = new Schema(
   }
 )
 
-const Product = mongoose.model('Products', productSchema);
+const Products = mongoose.model('Products', productSchema);
+
+//* create
+const createProduct = async (req, res, next) => {
+  const { name, image, category, tags, price} = req.body;
+  const active = true
+  const img_url = "https://via.placeholder.com/400";
+  const rating = 0;
+  try {
+    const newProduct = new Products({
+        name,
+        img_url,
+        category,
+        tags,
+        price,
+        rating,
+        active
+    });
+    await newProduct.save();
+    // This will be available in the next middleware
+    req.product = newProduct;
+    next();
+  } catch (err) {
+    console.error('Error creating product:', err);
+    next(err);
+  }
+};
+//* search
+const searchProduct = async (req, res, next) => {
+  try {
+    const { name, tag, category } = req.query;
+    const query = {};
+    if (name) {
+        query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+    }
+    if (tag) {
+        query.tags = { $in: [tag] }; // Tag must be in the product's tags array
+    }
+    if (category) {
+        query.category = { $regex: category, $options: 'i' }; // Case-insensitive search
+    }
+    const products = await Products.find(query);
+    req.products = products; // Return the list of matching products
+    next()
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+//* get by id
+// if (!product) {
+//   return res.status(404).json({ error: "Product not found" });
+// }
+const getProductById = async (req, res, next) => {
+  try{
+    const product = await Products.findById(req.params.id);
+    req.product = product;
+    next()
+  }
+  catch (error) {
+    console.error(error);
+    next(err);
+  }
+}
+
+//* delete
+const deleteProduct = async (req, res, next) => {
+  try{
+    const product = await Products.findByIdAndUpdate(req.params.id,
+      {active:false, updatedAt:null}
+      ,
+      { new: true, runValidators: true, overwrite: true }
+    );
+    req.product = product;
+    next()
+  }
+  catch (error) {
+    console.error(error);
+    next(err);
+  }
+}
+
 
 // Export the model
-module.exports = Product;
+module.exports = {
+    Products: Products,
+    createProduct: createProduct,
+    searchProduct: searchProduct,
+    getProductById: getProductById,
+    deleteProduct: deleteProduct
+  };
