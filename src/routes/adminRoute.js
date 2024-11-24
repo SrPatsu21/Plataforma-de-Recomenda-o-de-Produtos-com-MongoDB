@@ -18,7 +18,13 @@ router.get('/register_product', isAdmin, (req, res) =>{
     res.render('./admin/create_product', {title, post_destiny},);
   });
 
-router.post('/register_product', isAdmin, uploadImage, createProduct,
+
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+router.post('/register_product', isAdmin, upload.single('image'), uploadImage, createProduct,
   (req, res) => {
     res.status(201).redirect('/admin/list_products'); // Return to list
   });
@@ -39,5 +45,12 @@ router.get('/list_products', isAdmin, searchProduct, (req, res) =>{
 router.delete('/product/:id', isAdmin, deleteProduct, (req, res) =>{
   res.status(200).send(req.product)
 })
+
+//* update
+router.get('/edit_product/:id', isAdmin, (req, res) =>{
+  const title = 'Edit Product';
+  const put_destiny = '/admin/register_product/';
+  res.render('./admin/edit_product', {title, put_destiny},);
+});
 
 module.exports = router;

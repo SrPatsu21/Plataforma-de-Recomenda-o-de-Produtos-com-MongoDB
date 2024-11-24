@@ -15,7 +15,7 @@ app.use(express.json());
 const connectDB = require('./db');
 connectDB();
 
-//? Middleware setup
+//* Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -22,43 +22,33 @@ const imageSchema = new mongoose.Schema({
 const Image = mongoose.model('Image', imageSchema);
 
 //* functions
-const multer = require('multer');
-// Set up multer storage (in-memory storage for simplicity)
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 const uploadImage = async (req, res, next) => {
     try {
-        console.log(req)
-        // Ensure a file was uploaded
-        if (!req.body.image) {
+        const { name } = req.body;
+        const imageFile = req.file;
 
-            return res.status(400).send('No file uploaded.');
+        if (!imageFile) {
+            return res.status(400).send({ error: "No file uploaded" });
         }
 
-        // Create an image document and save to MongoDB
-        const image = new Image({
-            name: req.body.image.name || 'Untitled',  // optional name from request body
+        // Save image in MongoDB
+        const newImage = new Image({
+            name,
             img: {
-                data: req.body.image.buffer,           // image data
-                contentType: req.body.image.mimetype   // image content type (e.g. 'image/png')
-            }
+                data: imageFile.buffer,
+                contentType: imageFile.mimetype,
+            },
         });
 
-        // console.log(req.body.image.buffer)
-        // console.log(req.body.image.mimetype)
-
-        // Save the image to MongoDB
-        await image.save();
-
-        // Send a success response
-        req.img_id = image._id;
-        next()
-    } catch (err) {
-        console.error(err);
-        next(err)
+        await newImage.save();
+        req.img_id = newImage._id;
+        next();
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        next(error);
     }
-}
+};
 // Export the model
 module.exports = {
     Image: Image,
