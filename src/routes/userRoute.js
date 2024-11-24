@@ -5,6 +5,12 @@ const Users = require('../models/Users');
 
 const router = express.Router();
 
+//* get user page html
+router.get('/', isAuthenticated, (req, res) => {
+  const title = "Home";
+  res.render("./user/layout_user.pug", {title},);
+})
+
 //* login
 router.get('/login', (req, res) => {
   const error = req.query.error === 'true';
