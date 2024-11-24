@@ -19,7 +19,7 @@ passport.use(new LocalStrategy(
     // Find user by username
     const user = await Users.findOne({ username: username });
     if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
+      return done(null, false, { message: 'Incorrect username or password.' });
     }
 
     // Compare password
@@ -30,7 +30,7 @@ passport.use(new LocalStrategy(
       if (isMatch) {
         return done(null, user);
       } else {
-        return done(null, false, { message: 'Incorrect password.' });
+        return done(null, false, { message: 'Incorrect username or password.' });
       }
     });
   }
