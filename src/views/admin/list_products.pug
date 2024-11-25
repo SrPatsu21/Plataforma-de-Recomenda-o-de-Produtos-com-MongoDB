@@ -10,10 +10,10 @@ block content
                 input(type="text" name="name" placeholder="Search by name" value=`${name}` class="p-2 border border-gray-600 rounded-md")
                 input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="p-2 border border-gray-600 rounded-md")
                 input(type="text" name="category" placeholder="Search by category" value=`${category}` class="p-2 border border-gray-600 rounded-md")
-                button(type="submit" onclick="searchProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500") Search
+                button(type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500") Search
             // Create link
             a(href="/admin/register_product" class="md:w-2/12")
-                button(type="nutton" onclick="searchProducts()" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500") Create
+                button(type="button" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500") Create
         // Products list
         div(id="productlist" class="grid md:grid-cols-3 gap-4 content-stretch")
             each product in products

@@ -3,6 +3,7 @@ const router = express.Router();
 const { isAdmin } = require("./authentication")
 const {createProduct, searchProduct, deleteProduct, getProductById, updateProduct} = require('../models/Products')
 const {uploadImage, updateImage} = require('../models/Images');
+const {searchUsers, deleteUser} = require('../models/Users');
 require("dotenv").config();
 
 //* get admin page html
@@ -33,12 +34,11 @@ router.post('/register_product', isAdmin, upload.single('image'), uploadImage, c
 router.get('/list_products', isAdmin, searchProduct, (req, res) =>{
   const title = 'List Products';
   let { name, tag, category } = req.query;
-  const img_url = 'https://127.0.0.1:3000/image/'
   if(!name){name = ""};
   if(!tag){tag = ""};
   if(!category){category = ""};
   const products = req.products;
-  res.render('./admin/list_products', {title, products, name, tag, category, img_url},);
+  res.render('./admin/list_products', {title, products, name, tag, category},);
 })
 
 //* delete product
@@ -47,7 +47,7 @@ router.delete('/product/:id', isAdmin, deleteProduct, (req, res) =>{
   res.status(200).send(req.product)
 })
 
-//* update
+//* update product
 router.get('/edit_product/:id', isAdmin, getProductById, (req, res) =>{
   const product = req.product;
   const title = 'Edit Product';
@@ -58,6 +58,20 @@ router.get('/edit_product/:id', isAdmin, getProductById, (req, res) =>{
 //? post because the image that need to be uploaded and i dont know why dont work with put
 router.post('/edit_product', isAdmin, upload.single('image'), updateImage, updateProduct,  (req, res) =>{
   res.status(200).redirect('/admin/list_products');
+})
+
+//* list user
+router.get('/list_users',isAdmin, searchUsers, (req, res) =>{
+  const title = 'List Users';
+  let { username } = req.query;
+  if(!username){username = ""};
+  const users = req.users;
+  res.render('./admin/list_users', {title, users, username},);
+});
+
+//* delete user
+router.delete('/user/:id', isAdmin, deleteUser, (req, res) =>{
+  res.status(200).send(req.user)
 })
 
 module.exports = router;

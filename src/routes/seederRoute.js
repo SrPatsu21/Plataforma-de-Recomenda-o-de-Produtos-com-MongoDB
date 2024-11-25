@@ -1,19 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const Users = require('../models/Users');
+const { Users } = require('../models/Users');
 
 router.get('', async (req, res) =>{
     try {
-        const username = "admin"
-        const email = "paciente0@gmail.com"
-        const pass = "admin123"
-        const isAdmin = true;
-        const active = true;
+        const result = await Users.deleteMany({});
+        console.log(`${result.deletedCount} users have been deleted.`);
+    } catch (error) {
+        console.error('Error deleting users:', error);
+    }
+    try {
+        let username = "admin"
+        let email = "paciente0@gmail.com"
+        let pass = "admin123"
+        let isAdmin = true;
+        let active = true;
         bcrypt.hash(pass, 10, async (err, hash) => {
             if (err) return res.status(500).json({ message: 'Error hashing password' });
-            const password = hash;
-            const user = new Users({
+            let password = hash;
+            let user = new Users({
             username,
             email,
             password,
@@ -27,11 +33,39 @@ router.get('', async (req, res) =>{
             });
 
             await user.save();
-            res.redirect('/login');
+        });
+    } catch (error) {
+    }
+    try {
+        let username = "Ze das Couve 2004"
+        let email = "emailgrandedokrlsfd@gmail.com"
+        let pass = "senha123"
+        let isAdmin = false;
+        let active = true;
+        let lastWords = "queijo,couve,celular,pc";
+        let lastCategories = "Eletronicos,tomate";
+        let lastTags = "ssd,1T,ssd,HD,Brazil";
+        bcrypt.hash(pass, 10, async (err, hash) => {
+            if (err) return res.status(500).json({ message: 'Error hashing password' });
+            let password = hash;
+            let user = new Users({
+            username,
+            email,
+            password,
+            isAdmin,
+            active,
+            lastSearched: {
+                words: lastWords ? lastWords.split(',').map(word => word.trim()) : [],
+                categories: lastCategories ? lastCategories.split(',').map(cat => cat.trim()) : [],
+                tags: lastTags ? lastTags.split(',').map(tag => tag.trim()) : [],
+            },
+            });
+
+            await user.save();
         });
     } catch (err) {
-    res.status(400).send(err.message);
     }
+    res.redirect('/login');
 })
 
 module.exports = router;

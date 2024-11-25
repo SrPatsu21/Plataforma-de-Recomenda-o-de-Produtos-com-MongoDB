@@ -82,7 +82,46 @@ const userSchema = new Schema(
   }
 );
 
-const User = mongoose.model('Users', userSchema);
+const Users = mongoose.model('Users', userSchema);
 
+
+//* search
+const searchUsers = async (req, res, next) => {
+  try {
+    const { username } = req.query;
+    const limit = req.limit || 50;
+    const query = {};
+    if (username) {
+        query.username = { $regex: username, $options: 'i' }; // Case-insensitive search
+    }
+    // query.isAdmin = false;
+    const users = await Users.find(query).limit(limit);
+    req.users = users;
+    next()
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try{
+    const user = await Users.findByIdAndUpdate(req.params.id,
+      {active:false, updatedAt:null}
+      ,
+      { new: true, runValidators: true, overwrite: true }
+    );
+    req.user = user;
+    next()
+  }
+  catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
 // Export the model
-module.exports = User;
+module.exports = {
+  Users: Users,
+  searchUsers: searchUsers,
+  deleteUser: deleteUser
+}

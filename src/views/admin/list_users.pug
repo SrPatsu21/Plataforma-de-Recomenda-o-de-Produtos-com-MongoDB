@@ -1,0 +1,58 @@
+extends layout_adm.pug
+block nestHead
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js")
+block content
+    div(class="lg:w-8/12")
+        h1(class="text-2xl font-bold mb-6 text-center") List Users
+        div(class="w-full flex justify-between content-center flex-wrap")
+            // Search form
+            form(class="md:w-10/12 mb-6 px-8 flex justify-start gap-4 flex-wrap" type="GET" action="/admin/list_users")
+                input(type="text" name="username" placeholder="Search by username" value=`${username}` class="p-2 border border-gray-600 rounded-md")
+                button(type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500") Search
+        // users list
+        div(class="space-y-4")
+            each user in users
+                div(class="bg-white shadow-md rounded-lg p-6")
+                    div(class="flex justify-between items-center border-b pb-4 mb-4")
+                        h2(class="text-xl font-semibold text-gray-800")= user.username
+                        p(class="text-gray-500")= user.email
+                    div(class="flex flex-wrap gap-4 text-sm text-gray-700")
+                        .w-full.flex.flex-wrap
+                            h3(class="font-medium text-gray-900 mb-3 inline-block") Last Searched Words:
+                            ul(class="flex space-x-4")
+                                each word in user.lastSearched.words || []
+                                    li(class="list-disc ml-4")= word
+                        .w-full.flex.flex-wrap
+                            h3(class="font-medium text-gray-900 mb-3 inline-block") Last Searched Categories:
+                            ul(class="flex space-x-4")
+                                each category in user.lastSearched.categories || []
+                                    li(class="list-disc ml-4")= category
+                        .w-full.flex.flex-wrap
+                            h3(class="font-medium text-gray-900 mb-3 inline-block") Last Searched Tags:
+                            ul(class="flex space-x-4")
+                                each tag in user.lastSearched.tags || []
+                                    li(class="list-disc ml-4")= tag
+                    div(class="text-xs text-gray-500 mt-4 flex justify-between items-center mb-3")
+                        p Created At: <span class="font-medium text-gray-800">#{user.createdAt}</span>
+                        p Updated At: <span class="font-medium text-gray-800">#{user.updatedAt}</span>
+                    div(class="flex justify-between items-center")
+                        button(type="button" onclick=`deleteUser('${user._id}')` class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2") Remove
+                        span(class="ml-2 px-3 py-1 rounded-full text-sm font-medium " +(user.active ? "bg-green-200 text-green-600" : "bg-red-200 text-red-600"))= user.active ? "Active" : "Inactive"
+
+block nestedJS
+    script.
+        function deleteUser(userId) {
+            // Confirm with the user before proceeding
+            if (window.confirm('Are you sure you want to delete this User?')) {
+                axios.delete(`/admin/user/${userId}`)
+                    .then(response => {
+                        alert('User deleted successfully!');
+                        console.log(response.data);
+                         location.reload();
+                    })
+                    .catch(error => {
+                        console.log('Error deleting the user:', error);
+                        alert('Failed to delete the user. Please try again later.');
+                    });
+            }
+        }
