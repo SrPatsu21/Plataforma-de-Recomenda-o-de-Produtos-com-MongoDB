@@ -101,7 +101,7 @@ const createProduct = async (req, res, next) => {
   }
 };
 //* search
-const searchProduct = async (req, res, next) => {
+const searchProducts = async (req, res, next) => {
   try {
     const { name, tag, category } = req.query;
     const limit = req.limit || 50;
@@ -188,7 +188,7 @@ const updateProduct = async (req, res, next) => {
 module.exports = {
     Products: Products,
     createProduct: createProduct,
-    searchProduct: searchProduct,
+    searchProduct: searchProducts,
     getProductById: getProductById,
     deleteProduct: deleteProduct,
     updateProduct: updateProduct,
