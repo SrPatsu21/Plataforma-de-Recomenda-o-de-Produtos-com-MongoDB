@@ -1,7 +1,7 @@
 const express = require('express');
 const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
-const Users = require('../models/Users');
+const { Users, updateUser } = require('../models/Users');
 
 const router = express.Router();
 
@@ -14,7 +14,17 @@ router.get('/', isAuthenticated, (req, res) => {
 //* profile user page
 router.get('/profile', isAuthenticated, (req, res) => {
   const title = "Profile";
-  res.render("./user/profile.pug", {title},);
+  const id = req.user._id;
+  const name = req.user.username;
+  const email = req.user.email;
+  const profile_edit = "/profile/profile_edit"
+  res.render("./user/profile.pug", {title, id, name, email, profile_edit},);
+})
+
+//* TODO verify inputs
+//* edit profile
+router.post("/profile/profile_edit", isAuthenticated, updateUser, (req, res) => {
+  res.status(200).redirect("/profile");  
 })
 
 //* login
