@@ -2,7 +2,7 @@ extends layout_adm.pug
 block nestHead
     script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js")
 block content
-    div(class="lg:w-8/12 mt-12")
+    div(class="lg:w-8/12 mt-12 mb-6")
         h1(class="text-2xl font-bold mb-6 text-center") List Users
         div(class="w-full flex justify-end content-center flex-wrap")
             // Search form
@@ -12,7 +12,7 @@ block content
         // users list
         div(class="space-y-4")
             each user in users
-                div(class="bg-white shadow-md rounded-lg p-6")
+                div(class="bg-white shadow-md rounded-lg p-6 mb-6")
                     div(class="flex justify-between items-center border-b pb-4 mb-4")
                         h2(class="text-xl font-semibold text-gray-800")= user.username
                         p(class="text-gray-500")= user.email
@@ -48,7 +48,7 @@ block nestedJS
                     .then(response => {
                         alert('User deleted successfully!');
                         console.log(response.data);
-                         location.reload();
+                        location.reload();
                     })
                     .catch(error => {
                         console.log('Error deleting the user:', error);
