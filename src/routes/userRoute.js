@@ -18,13 +18,20 @@ router.get('/profile', isAuthenticated, (req, res) => {
   const name = req.user.username;
   const email = req.user.email;
   const profile_edit = "/profile/profile_edit"
-  res.render("./user/profile.pug", {title, id, name, email, profile_edit},);
+  let message_status = "hidden";
+
+  if (req.query.message) {
+    message_status = ""
+  } else {
+  }
+  req.query.message = null;
+  res.render("./user/profile.pug", {title, id, name, email, profile_edit, message_status},);
 })
 
 //* TODO verify inputs
 //* edit profile
 router.post("/profile/profile_edit", isAuthenticated, updateUser, (req, res) => {
-  res.status(200).redirect("/profile");  
+  res.status(200).redirect("/profile?message=show");
 })
 
 //* login

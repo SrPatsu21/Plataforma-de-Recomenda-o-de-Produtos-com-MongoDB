@@ -1,9 +1,13 @@
 extends layout_user.pug
 block content
     .bg-white.p-6.rounded-lg.shadow-lg.w-96 
+        div(id="alert" class=`bg-green-100 border-l-4 border-green-500 text-green-700 p-4 flex items-center justify-between ${message_status}`)
+            p(class="font-medium") Changes completed successfully
+            button(type="button" class="text-green-700 hover:text-green-900 focus:outline-none" onclick="closeMessage()")
+                span(class="text-xl") &times;
         h1.text-2xl.font-semibold.text-center.mb-4 Profile 
         div 
-            form(action=`${profile_edit}` enctype="multipart/form-data" method="POST").space-y-4 
+            form(action=`${profile_edit}` id="edit_form" method="POST").space-y-4 
                 input(type="hidden", name="id" value=`${id}`)
                 div 
                     label(for="username").block.text-sm.font-medium.text-gray-700 Name
@@ -15,3 +19,10 @@ block content
                     button(type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2") Edit
 
 block nestedJS
+    script.
+        function openMessage() {
+            document.getElementById("alert").classList.remove("hidden");
+        }
+        function closeMessage() {
+            document.getElementById("alert").classList.add("hidden");
+        }

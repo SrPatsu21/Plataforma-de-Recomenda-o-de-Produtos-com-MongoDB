@@ -101,8 +101,6 @@ const updateUser = async (req, res, next) => {
                 overwrite: true,
             }
         );
-        console.log(`req.user = ${req}`);
-        console.log(`user = ${user}`);
         req.user = user;
         next();
     } catch (error) {
