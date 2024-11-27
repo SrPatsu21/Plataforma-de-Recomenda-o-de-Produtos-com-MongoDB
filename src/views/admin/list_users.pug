@@ -12,7 +12,7 @@ block content
         // users list
         div(class="space-y-4")
             each user in users
-                div(class="bg-white shadow-md rounded-lg p-6")
+                div(class="bg-white shadow-md rounded-lg p-6 mb-6")
                     div(class="flex justify-between items-center border-b pb-4 mb-4")
                         h2(class="text-xl font-semibold text-gray-800")= user.username
                         p(class="text-gray-500")= user.email
@@ -48,7 +48,7 @@ block nestedJS
                     .then(response => {
                         alert('User deleted successfully!');
                         console.log(response.data);
-                         location.reload();
+                        location.reload();
                     })
                     .catch(error => {
                         console.log('Error deleting the user:', error);
