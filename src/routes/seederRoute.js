@@ -78,7 +78,7 @@ router.get('', async (req, res) =>{
         //*user
         let lastWords = "queijo,couve,celular,pc";
         let lastCategories = "Eletronicos,tomate";
-        let lastTags = "ssd,1T,ssd,HD,Brazil";
+        let lastTags = "Small,Sleekl";
         bcrypt.hash("senha123", 10, async (err, hash) => {
             if (err) return res.status(500).json({ message: 'Error hashing password' });
             let password = hash;

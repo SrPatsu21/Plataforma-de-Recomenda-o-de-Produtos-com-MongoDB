@@ -15,7 +15,8 @@ router.get('/',recomendateProduct, searchProductsActive, (req, res) => {
   if(!tag){tag = ""};
   if(!category){category = ""};
   const products = req.products;
-  res.render("./user/list_products.pug", {title, products, name, tag, category},);
+  const recomendate_products = req.recomendate_products
+  res.render("./user/list_products.pug", {title, products, recomendate_products, name, tag, category},);
 });
 
 //* profile user page

@@ -138,26 +138,27 @@ const searchProductsActive = async (req, res, next) => {
 
 const recomendateProduct = async (req, res, next) => {
   try {
-    if(req.user)
+    if(req.user && !(req.query.name || req.query.tag || req.query.category))
     {
       const user = req.user;
-      const names = user.lastSearched.words;
+      const words = user.lastSearched.words;
       const tags = user.lastSearched.tags
       const categories = user.lastSearched.categories
-      const limit = req.limit_recomendation || 6;
-      const query = {};
-      query.active = true;
-      if (names) {
-          query.name = { $in: [names], }; // Case-insensitive search
-      }
-      if (tags) {
-          query.tags = { $in: [tags] }; // Tag must be in the product's tags array
-      }
-      if (categories) {
-          query.category = { $in: categories,}; // Case-insensitive search
-      }
-      const products = await Products.find(query).limit(limit);
-      req.recomendate_products = products; // Return the list of matching products
+      const limit = req.limit_recomendation || 8;
+      const products = await Products.find({
+          active: true,
+          $or: [
+            { name: { $in: words } },
+          ],
+          $or: [
+            { category: { $in: categories } },
+          ],
+          $or:[
+            { tags: { $in: tags } },
+          ],
+        }).sort({ timesPurchased: -1 })
+        .limit(limit);
+      req.recomendate_products = products;
     }
     next()
   } catch (error) {

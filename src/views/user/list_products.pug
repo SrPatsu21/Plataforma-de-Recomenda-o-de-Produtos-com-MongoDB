@@ -6,28 +6,55 @@ block content
         h1(class="text-2xl font-bold mb-6 text-center") List Products
         div(class="w-full flex justify-between content-center flex-wrap")
             // Search form
-            form(class="md:w-10/12 mb-6 px-8 flex justify-start gap-4 flex-wrap" type="GET" action="/")
-                input(type="text" name="name" placeholder="Search by name" value=`${name}` class="p-2 border border-gray-600 rounded-md")
-                input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="p-2 border border-gray-600 rounded-md")
-                input(type="text" name="category" placeholder="Search by category" value=`${category}` class="p-2 border border-gray-600 rounded-md")
-                button(type="submit" onclick="searchProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500") Search
-
-        div(id="productlist" class="grid md:grid-cols-4 gap-4 content-stretch")
+            form(class="w-full mb-6 px-8 flex justify-start gap-4 flex-wrap" type="GET" action="/")
+                input(type="text" name="name" placeholder="Search by name" value=`${name}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full")
+                input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full")
+                input(type="text" name="category" placeholder="Search by category" value=`${category}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full")
+                button(type="submit" onclick="searchProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 lg:w-auto md:w-full") Search
+        if recomendate_products
+            h1.text-4xl.font-bold.text-gray-800.mb-4.ml-3 Recomended:
+            div(id="productlist" class="grid lg:grid-cols-4 md:grid-cols-3 gap-4 content-stretch")
+                each product in recomendate_products
+                    div.container.mx-auto.p-4.min-h-max.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-start.flex-col
+                        a(href=`${product._id}`)
+                            img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
+                        .mt-4.w-full
+                            h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
+                            p.text-sm.text-gray-600.mb-2 Category:&#x20;
+                                span.text-blue-600.font-semibold #{product.category}
+                            div.flex.flex-wrap.gap-2.mb-4.max-h-24.overflow-y-auto
+                                each tag in product.tags
+                                    span.inline-block.bg-gray-200.text-gray-700.text-xs.px-2.py-1.rounded-full.border-gray-500.border #{tag}
+                            div.flex.items-center.justify-between.mb-4
+                                span.text-xl.font-bold.text-gray-800 $#{product.price}
+                            div.flex.items-center.justify-between.mb-4
+                                span.text-blue-500.text-sm sales: #{product.timesPurchased}
+                        div(class="w-full flex flex-wrap 2xl:justify-between place-content-end grow")
+                            button(type="button" onclick=`('${product._id}')` class="bg-green-600 xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 flex items-center gap-2 h-min") Comprar Agora
+                            button(type="button" onclick=`('${product._id}')` class="bg-blue-600  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2 h-min mt-2") Carrinho
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
+                                </svg>
+        h1.text-4xl.font-bold.text-gray-800.mb-4.mt-8.ml-3 Others:
+        div(id="productlist" class="grid lg:grid-cols-4 md:grid-cols-3 gap-4 content-stretch")
             each product in products
-                div.container.mx-auto.p-4.min-h-max.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-between
+                div.container.mx-auto.p-4.min-h-max.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-start.flex-col
                     a(href=`${product._id}`)
                         img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
                     .mt-4.w-full
                         h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
                         p.text-sm.text-gray-600.mb-2 Category:&#x20;
                             span.text-blue-600.font-semibold #{product.category}
-                        div.flex.flex-wrap.gap-2.mb-4
+                        div.flex.flex-wrap.gap-2.mb-4.max-h-24.overflow-y-auto
                             each tag in product.tags
                                 span.inline-block.bg-gray-200.text-gray-700.text-xs.px-2.py-1.rounded-full.border-gray-500.border #{tag}
                         div.flex.items-center.justify-between.mb-4
                             span.text-xl.font-bold.text-gray-800 $#{product.price}
                         div.flex.items-center.justify-between.mb-4
                             span.text-blue-500.text-sm sales: #{product.timesPurchased}
-                        div.flex.flex-wrap.justify-between.px-2
-                            //- button(type="button" onclick=`deleteProduct('${product._id}')` class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2") Remove
-                            //- button(type="button" onclick=`redirectToEditProduct('${product._id}')` class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2") Edit
+                    div.w-full.flex.flex-wrap.justify-between.grow.items-end
+                        button(type="button" onclick=`('${product._id}')` class="bg-green-600 text-white px-3 py-2 2xl:w-auto xl:w-full rounded hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 flex items-center gap-2 h-min") Comprar Agora
+                        button(type="button" onclick=`('${product._id}')` class="bg-blue-600 text-white px-3 py-2 2xl:w-auto xl:w-full rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2 h-min mt-2") Carrinho
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
+                            </svg>
