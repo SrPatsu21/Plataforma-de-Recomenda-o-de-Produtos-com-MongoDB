@@ -1,9 +1,45 @@
 const express = require('express');
 const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
-const { Users } = require('../models/Users');
+const { Users, updateUser } = require('../models/Users');
+const { searchProduct } = require('../models/Products');
 
 const router = express.Router();
+
+//* get user page html
+router.get('/', isAuthenticated, searchProduct, (req, res) => {
+  const title = "Home";
+  let { name, tag, category } = req.query;
+  const img_url = 'https://127.0.0.1:3000/image/'
+  if(!name){name = ""};
+  if(!tag){tag = ""};
+  if(!category){category = ""};
+  const products = req.products;
+  res.render("./user/list_products.pug", {title, products, name, tag, category, img_url},);
+});
+
+//* profile user page
+router.get('/profile', isAuthenticated, (req, res) => {
+  const title = "Profile";
+  const id = req.user._id;
+  const name = req.user.username;
+  const email = req.user.email;
+  const profile_edit = "/profile/profile_edit"
+  let message_status = "hidden";
+
+  if (req.query.message) {
+    message_status = ""
+  } else {
+  }
+  req.query.message = null;
+  res.render("./user/profile.pug", {title, id, name, email, profile_edit, message_status},);
+})
+
+//* TODO verify inputs
+//* edit profile
+router.post("/profile/profile_edit", isAuthenticated, updateUser, (req, res) => {
+  res.status(200).redirect("/profile?message=show");
+})
 
 //* login
 router.get('/login', (req, res) => {
@@ -24,7 +60,7 @@ router.post('/login',
       }
       req.login(user, (err) => {
         if (err) return next(err);
-        return res.json({ message: 'Logged in successfully' });
+        res.redirect('/');
       });
     })(req, res, next);
 });
