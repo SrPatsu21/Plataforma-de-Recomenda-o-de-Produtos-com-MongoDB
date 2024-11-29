@@ -12,12 +12,12 @@ curl -X POST http://localhost:3000/products -H "Content-Type: application/json" 
 router.route('/')
     .post( isAdmin, createProduct,
       (req, res) => {
-        res.status(201).json(req.product); // Return the newly created Product
+        res.status(201).json(req.product);
     })
     .get(isAdmin, searchProduct,
       (req, res) => {
         const products = req.products;
-        res.status(200).json(products); // Return the list of matching products
+        res.status(200).json(products);
     });
 
 router.route('/:id')

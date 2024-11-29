@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const { User } = require('./Users')
 
 const productSchema = new Schema(
   {
@@ -42,18 +43,6 @@ const productSchema = new Schema(
           return /^[0-9]+(\.[0-9]{2})?$/.test(v.toString()); // Ensures two decimal places
         },
         message: props => `${props.value} is not a valid price!`
-      },
-    },
-    rating: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 5, // Rating must be between 0 and 5
-      validate: {
-        validator: function(v) {
-          return /^[0-5](\.[0-9])?$/.test(v.toString()); // Allows 1 decimal place
-        },
-        message: props => `${props.value} is not a valid rating!`,
       },
     },
     timesPurchased: {
@@ -117,6 +106,59 @@ const searchProducts = async (req, res, next) => {
     }
     const products = await Products.find(query).limit(limit);
     req.products = products; // Return the list of matching products
+    next()
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+const searchProductsActive = async (req, res, next) => {
+  try {
+    const { name, tag, category } = req.query;
+    const limit = req.limit || 50;
+    const query = {};
+    query.active = true;
+    if (name) {
+        query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+    }
+    if (tag) {
+        query.tags = { $in: [tag] }; // Tag must be in the product's tags array
+    }
+    if (category) {
+        query.category = { $regex: category, $options: 'i' }; // Case-insensitive search
+    }
+    const products = await Products.find(query).limit(limit);
+    req.products = products; // Return the list of matching products
+    next()
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+const recomendateProduct = async (req, res, next) => {
+  try {
+    if(req.user)
+    {
+      const user = req.user;
+      const names = user.lastSearched.words;
+      const tags = user.lastSearched.tags
+      const categories = user.lastSearched.categories
+      const limit = req.limit_recomendation || 6;
+      const query = {};
+      query.active = true;
+      if (names) {
+          query.name = { $in: [names], }; // Case-insensitive search
+      }
+      if (tags) {
+          query.tags = { $in: [tags] }; // Tag must be in the product's tags array
+      }
+      if (categories) {
+          query.category = { $in: categories,}; // Case-insensitive search
+      }
+      const products = await Products.find(query).limit(limit);
+      req.recomendate_products = products; // Return the list of matching products
+    }
     next()
   } catch (error) {
     console.error(error);
@@ -192,4 +234,6 @@ module.exports = {
     getProductById: getProductById,
     deleteProduct: deleteProduct,
     updateProduct: updateProduct,
+    recomendateProduct: recomendateProduct,
+    searchProductsActive, searchProductsActive
   };

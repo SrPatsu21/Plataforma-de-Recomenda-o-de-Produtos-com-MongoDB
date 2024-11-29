@@ -2,20 +2,20 @@ const express = require('express');
 const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
 const { Users, updateUser } = require('../models/Users');
-const { searchProduct } = require('../models/Products');
+const { searchProductsActive, recomendateProduct } = require('../models/Products');
 
 const router = express.Router();
 
 //* get user page html
-router.get('/', isAuthenticated, searchProduct, (req, res) => {
+router.get('/',recomendateProduct, searchProductsActive, (req, res) => {
   const title = "Home";
   let { name, tag, category } = req.query;
-  const img_url = 'https://127.0.0.1:3000/image/'
+
   if(!name){name = ""};
   if(!tag){tag = ""};
   if(!category){category = ""};
   const products = req.products;
-  res.render("./user/list_products.pug", {title, products, name, tag, category, img_url},);
+  res.render("./user/list_products.pug", {title, products, name, tag, category},);
 });
 
 //* profile user page
@@ -48,7 +48,6 @@ router.get('/login', (req, res) => {
   res.render('./user/login', {title, error});
 });
 
-//TODO redirect to main page
 router.post('/login',
   (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
