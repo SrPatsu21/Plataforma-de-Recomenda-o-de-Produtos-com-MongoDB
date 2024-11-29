@@ -3,17 +3,18 @@ block nestHead
     script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js")
 block content
     div(class="lg:w-8/12")
-        h1(class="text-2xl font-bold mb-6 text-center") List Products
-        div(class="md:w-full flex justify-end content-center flex-wrap mb-6")
+        h1(class="text-2xl font-bold mb-6 mt-16 text-center") List Products
+        div(class="md:w-full flex justify-between content-center flex-wrap mb-6")
             // Search form
-            form(class="md:w-full lg:w-10/12 mb-6 px-8 flex justify-between flex-wrap gap-1" type="GET" action="/admin/list_products")
-                input(type="text" name="name" placeholder="Search by name" value=`${name}` class="w-3/12 p-2 border border-gray-600 rounded-md")
-                input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="w-3/12 p-2 border border-gray-600 rounded-md")
-                input(type="text" name="category" placeholder="Search by category" value=`${category}` class="w-3/12 p-2 border border-gray-600 rounded-md")
-                button(type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500") Search
+            form(class="w-full mb-6 px-8 flex justify-between flex-wrap gap-1" type="GET" action="/admin/list_products")
+                input(type="text" name="name" placeholder="Search by name" value=`${name}` class="w-3/12 p-2 border border-gray-600 rounded-md lg:w-auto md:w-full sm:w-full")
+                input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="w-3/12 p-2 border border-gray-600 rounded-md lg:w-auto md:w-full sm:w-full")
+                input(type="text" name="category" placeholder="Search by category" value=`${category}` class="w-3/12 p-2 border border-gray-600 rounded-md lg:w-auto md:w-full sm:w-full")
+                button(type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 lg:w-auto md:w-full sm:w-full") Search
             // Create link
-            a(href="/admin/register_product" class="md:w-2/12")
-                button(type="button" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500") Create
+            div(class="w-full mb-6 px-8 flex justify-between flex-wrap gap-1")
+                a(href="/admin/register_product" class="lg:w-2/12 md:w-full sm:w-full")
+                    button(type="button" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500") Create
         // Products list
         div(id="productlist" class="grid md:grid-cols-3 gap-4 content-stretch")
             each product in products

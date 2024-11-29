@@ -3,14 +3,13 @@ block nestHead
     script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js")
 block content
     div(class="lg:w-10/12")
-        h1(class="text-2xl font-bold mb-6 text-center") List Products
-        div(class="w-full flex justify-between content-center flex-wrap")
+        div(class="w-full flex justify-between content-center flex-wrap mt-16")
             // Search form
             form(class="w-full mb-6 px-8 flex justify-start gap-4 flex-wrap" type="GET" action="/")
-                input(type="text" name="name" placeholder="Search by name" value=`${name}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full")
-                input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full")
-                input(type="text" name="category" placeholder="Search by category" value=`${category}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full")
-                button(type="submit" onclick="searchProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 lg:w-auto md:w-full") Search
+                input(type="text" name="name" placeholder="Search by name" value=`${name}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full sm:w-full")
+                input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full sm:w-full")
+                input(type="text" name="category" placeholder="Search by category" value=`${category}` class="p-2 border border-gray-600 rounded-md lg:w-auto md:w-full sm:w-full")
+                button(type="submit" onclick="searchProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 lg:w-auto md:w-full sm:w-full") Search
         if recomendate_products
             h1.text-4xl.font-bold.text-gray-800.mb-4.ml-3 Recomended:
             div(id="productlist" class="grid lg:grid-cols-4 md:grid-cols-3 gap-4 content-stretch")
