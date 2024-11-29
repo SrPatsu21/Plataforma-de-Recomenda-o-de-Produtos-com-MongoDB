@@ -1,8 +1,8 @@
 extends layout_user.pug
 block nestHead
     script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js")
-block content 
-    div(class="lg:w-8/12")
+block content
+    div(class="lg:w-10/12")
         h1(class="text-2xl font-bold mb-6 text-center") List Products
         div(class="w-full flex justify-between content-center flex-wrap")
             // Search form
@@ -11,14 +11,17 @@ block content
                 input(type="text" name="tag" placeholder="Search by tag" value=`${tag}` class="p-2 border border-gray-600 rounded-md")
                 input(type="text" name="category" placeholder="Search by category" value=`${category}` class="p-2 border border-gray-600 rounded-md")
                 button(type="submit" onclick="searchProducts()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500") Search
-        // Products list
-        div(id="productlist" class="grid md:grid-cols-3 gap-4 content-stretch")
-            each product in products
-                if product.active
-                    div.container.mx-auto.p-4.min-h-max.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-between
+
+        // The scrollable overflow container
+        div(class="overflow-x-auto  p-2 bg-white shadow-inner rounded-lg")
+            // Responsive grid layout
+            div(class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4")
+                each product in products
+                    // The card
+                    div.w-full.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.flex.flex-col
                         a(href=`${product._id}`)
-                            img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
-                        .mt-4.w-full
+                            img(class="w-full.h-40.sm:h-48.md:h-56.lg:h-64.object-cover" src=`/image/${product.img_id}` alt="Product Image")
+                        .p-4.flex-grow
                             h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
                             p.text-sm.text-gray-600.mb-2 Category:&#x20;
                                 span.text-blue-600.font-semibold #{product.category}
@@ -27,26 +30,5 @@ block content
                                     span.inline-block.bg-gray-200.text-gray-700.text-xs.px-2.py-1.rounded-full.border-gray-500.border #{tag}
                             div.flex.items-center.justify-between.mb-4
                                 span.text-xl.font-bold.text-gray-800 $#{product.price}
-                                div.flex.items-center
-                                span.text-gray-600.text-sm ★ (#{product.rating})
-                            div.flex.items-center.justify-between.mb-4
+                            div.flex.items-center.justify-between
                                 span.text-blue-500.text-sm sales: #{product.timesPurchased}
-                            div.flex.flex-wrap.justify-between.px-2
-                else
-                    div.container.mx-auto.p-4.min-h-max.bg-red-300.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-between
-                        a(href=`${product._id}`)
-                            img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
-                        .mt-4.w-full
-                            h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
-                            p.text-sm.text-gray-600.mb-2 Category:&#x20;
-                                span.text-blue-600.font-semibold #{product.category}
-                            div.flex.flex-wrap.gap-2.mb-4
-                                each tag in product.tags
-                                    span.inline-block.bg-gray-200.text-gray-700.text-xs.px-2.py-1.rounded-full.border-gray-500.border #{tag}
-                            div.flex.items-center.justify-between.mb-4
-                                span.text-xl.font-bold.text-gray-800 $#{product.price}
-                                div.flex.items-center
-                                span.text-gray-600.text-sm ★ (#{product.rating})
-                            div.flex.items-center.justify-between.mb-4
-                                span.text-blue-500.text-sm sales: #{product.timesPurchased}
-                            div.flex.flex-wrap.justify-between.px-2

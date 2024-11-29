@@ -50,7 +50,6 @@ router.get('', async (req, res) =>{
             category: faker.commerce.department(),
             tags: Array.from({ length: tagCount }, () => faker.commerce.productAdjective()),
             price: faker.commerce.price(10, 500, 2), // Random price between $10 and $500
-            rating: parseFloat(faker.number.float({ min: 0, max: 5, precision: 0.1 }).toFixed(1)),
             timesPurchased: faker.number.int({ min: 0, max: 500 }),
             active: true,
         };
