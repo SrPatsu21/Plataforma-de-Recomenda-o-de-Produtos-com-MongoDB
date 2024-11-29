@@ -2,7 +2,7 @@ const express = require('express');
 const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
 const { Users, updateUser } = require('../models/Users');
-const { searchProductsActive, recomendateProduct } = require('../models/Products');
+const { searchProductsActive, recomendateProduct, getProductById } = require('../models/Products');
 
 const router = express.Router();
 
@@ -18,6 +18,11 @@ router.get('/',recomendateProduct, searchProductsActive, (req, res) => {
   const login = req.isAuthenticated();
   res.render("./user/list_products.pug", {title, products, name, tag, category, login},);
 });
+
+router.get('/product/:id', getProductById, (req, res) => {
+  const product = req.product
+  res.render("./user/product.pug", {product},);
+})
 
 //* profile user page
 router.get('/profile', isAuthenticated, (req, res) => {

@@ -19,7 +19,7 @@ block content
                 each product in products
                     // The card
                     div.w-full.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.flex.flex-col
-                        a(href=`${product._id}`)
+                        a(href=`product/${product._id}`)
                             img(class="w-full.h-40.sm:h-48.md:h-56.lg:h-64.object-cover" src=`/image/${product.img_id}` alt="Product Image")
                         .p-4.flex-grow
                             h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
