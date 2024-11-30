@@ -2,12 +2,12 @@ const express = require('express');
 const {passport, isAuthenticated} = require('./authentication');
 const bcrypt = require('bcrypt');
 const { Users, updateUser } = require('../models/Users');
-const { searchProductsActive, recomendateProduct } = require('../models/Products');
+const { searchProductsActive, recomendateProduct, saveForUserRecomendation } = require('../models/Products');
 
 const router = express.Router();
 
 //* get user page html
-router.get('/',recomendateProduct, searchProductsActive, (req, res) => {
+router.get('/',recomendateProduct, searchProductsActive, saveForUserRecomendation, (req, res) => {
   const title = "Home";
   let { name, tag, category } = req.query;
 

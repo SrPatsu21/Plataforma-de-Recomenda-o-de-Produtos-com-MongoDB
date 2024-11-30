@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { User } = require('./Users')
+const { Users } = require('./Users')
 
 const productSchema = new Schema(
   {
@@ -127,6 +127,7 @@ const searchProductsActive = async (req, res, next) => {
     }
     const products = await Products.find(query).limit(limit);
     req.products = products; // Return the list of matching products
+
     next()
   } catch (error) {
     console.error(error);
@@ -134,6 +135,43 @@ const searchProductsActive = async (req, res, next) => {
   }
 };
 
+const saveForUserRecomendation = async (req, res, next) => {
+  try {
+    if(req.products && req.user && req.query){
+      const { name, tag, category } = req.query;
+      const user = req.user;
+      if (name) {
+        user.lastSearched.words.unshift(name);
+        if (user.lastSearched.words.length > 10) {
+            user.lastSearched.words = user.lastSearched.words.slice(0, 10);
+        }
+      }
+      if (tag) {
+        user.lastSearched.tags.unshift(tag);
+        if (user.lastSearched.tags.length > 10) {
+            user.lastSearched.tags = user.lastSearched.tags.slice(0, 10);
+        }
+      }
+      if (category) {
+        user.lastSearched.categories.unshift(category);
+        if (user.lastSearched.categories.length > 10) {
+            user.lastSearched.categories = user.lastSearched.categories.slice(0, 10);
+        }
+      }
+      const user_updated = await Users.findByIdAndUpdate(
+        req.user._id,
+        {lastSearched: user.lastSearched},
+        { new: true, runValidators: true, overwrite: true }
+      )
+    }
+    next()
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+//* recomendation
 const recomendateProduct = async (req, res, next) => {
   try {
     if(req.user && !(req.query.name || req.query.tag || req.query.category))
@@ -234,5 +272,6 @@ module.exports = {
     deleteProduct: deleteProduct,
     updateProduct: updateProduct,
     recomendateProduct: recomendateProduct,
-    searchProductsActive, searchProductsActive
+    searchProductsActive: searchProductsActive,
+    saveForUserRecomendation: saveForUserRecomendation,
   };
