@@ -163,6 +163,7 @@ const saveForUserRecomendation = async (req, res, next) => {
         {lastSearched: user.lastSearched},
         { new: true, runValidators: true, overwrite: true }
       )
+      console.log(user_updated)
     }
     next()
   } catch (error) {
@@ -185,11 +186,7 @@ const recomendateProduct = async (req, res, next) => {
           active: true,
           $or: [
             { name: { $in: words } },
-          ],
-          $or: [
             { category: { $in: categories } },
-          ],
-          $or:[
             { tags: { $in: tags } },
           ],
         }).sort({ timesPurchased: -1 })
