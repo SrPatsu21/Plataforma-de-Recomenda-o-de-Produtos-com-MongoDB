@@ -20,9 +20,39 @@ router.get('/',recomendateProduct, searchProductsActive, (req, res) => {
   res.render("./user/list_products.pug", {title, products, recomendate_products, name, tag, category, login},);
 });
 
+router.post('/add-cart/:id', isAuthenticated, getProductById, (req, res) => {
+  let cart = req.session.cart || [];
+  const product = req.product;
+  cart.push(product)
+  req.session.cart = cart;
+  res.status(200).json({ message: 'add' });
+})
+
+router.delete('/rem-cart/:id', isAuthenticated, (req, res) => {
+  let cart = req.session.cart || [];
+  const newCart = cart.filter(product => product._id !== req.params.id);
+  req.session.cart = newCart;
+  res.status(200).json({ message: 'rem' });
+})
+
 router.get('/product/:id', getProductById, (req, res) => {
   const product = req.product
-  res.render("./user/product.pug", {product},);
+  const title = req.product.name
+  res.render("./user/product.pug", {title, product},);
+})
+
+router.get('/cart', isAuthenticated, (req, res) => {
+  const title = "cart";
+  const products = req.session.cart || [];
+  const subtotal = products.reduce((acc, product) => acc + Number(product.price.$numberDecimal), 0);
+  const login = req.isAuthenticated();
+  res.render("./user/cart.pug", {title, products, subtotal, login},);
+})
+
+router.get('/checkout', isAuthenticated, (req, res) => {
+  const products = req.session.cart || [];
+  const subtotal = products.reduce((acc, product) => acc + Number(product.price.$numberDecimal), 0);
+  res.render("./user/checkout.pug", { products, subtotal })
 })
 
 //* profile user page
@@ -39,7 +69,8 @@ router.get('/profile', isAuthenticated, (req, res) => {
   } else {
   }
   req.query.message = null;
-  res.render("./user/profile.pug", {title, id, name, email, profile_edit, message_status},);
+  const login = req.isAuthenticated();
+  res.render("./user/profile.pug", {title, id, name, email, profile_edit, message_status, login},);
 })
 
 //* TODO verify inputs

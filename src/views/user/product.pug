@@ -16,3 +16,5 @@ block content
 
         .product-price.mt-6.text-2xl.font-bold.text-green-500 $#{product.price}
         .text-blue-500.text-sm sales: #{product.timesPurchased}
+        button(type="button" onclick=`('${product._id}')` class="bg-blue-600  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex justify-center items-center content-center gap-2 h-min mt-2") Add cart
+        button(type="button" onclick=`('${product._id}')` class="bg-red-800  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 flex justify-center items-center content-center gap-2 h-min mt-2") Return

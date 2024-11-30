@@ -16,7 +16,7 @@ block content
             div(id="productlist" class="grid lg:grid-cols-4 md:grid-cols-3 gap-4 content-stretch")
                 each product in recomendate_products
                     div.container.mx-auto.p-4.min-h-max.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-start.flex-col
-                        a(href=`${product._id}`)
+                        a(href=`/product/${product._id}`)
                             img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
                         .mt-4.w-full
                             h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
@@ -31,7 +31,7 @@ block content
                                 span.text-blue-500.text-sm sales: #{product.timesPurchased}
                         div(class="w-full flex flex-wrap 2xl:justify-between place-content-end grow")
                             button(type="button" onclick=`('${product._id}')` class="bg-green-600 xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 flex items-center gap-2 h-min") Comprar Agora
-                            button(type="button" onclick=`('${product._id}')` class="bg-blue-600  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2 h-min mt-2") Carrinho
+                            button(type="button" class="bg-blue-600  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2 h-min mt-2 add-to-cart" data-product-id=`${product._id}`) Carrinho
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                     <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
                                 </svg>
@@ -39,7 +39,7 @@ block content
         div(id="productlist" class="grid lg:grid-cols-4 md:grid-cols-3 gap-4 content-stretch")
             each product in products
                 div.container.mx-auto.p-4.min-h-max.bg-neutral-200.shadow-lg.rounded-lg.overflow-hidden.max-w-sm.mx-auto.flex.flex-wrap.content-start.flex-col
-                    a(href=`${product._id}`)
+                    a(href=`/product/${product._id}`)
                         img(class="w-full.h-auto.object-cover.sm:h-48.md:h-64.lg:h-80" src=`/image/${product.img_id}` alt="Product Image")
                     .mt-4.w-full
                         h2.text-lg.font-bold.text-gray-800.mb-2 #{product.name}
@@ -54,7 +54,49 @@ block content
                             span.text-blue-500.text-sm sales: #{product.timesPurchased}
                     div(class="w-full flex flex-wrap 2xl:justify-between place-content-end grow")
                         button(type="button" onclick=`('${product._id}')` class="bg-green-600 xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 flex items-center gap-2 h-min") Comprar Agora
-                        button(type="button" onclick=`('${product._id}')` class="bg-blue-600  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2 h-min mt-2") Carrinho
+                        button(type="button" class="bg-blue-600  xl:w-full md:w-full sm:w-full text-white px-3 py-2 2xl:w-auto rounded hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 flex items-center gap-2 h-min mt-2 add-to-cart" data-product-id=`${product._id}`) Carrinho
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                 <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
                             </svg>
+
+block nestedJS
+    script.
+
+        // Add event listener for each button
+        const buttons = document.querySelectorAll('.add-to-cart');
+        buttons.forEach(button => {
+          button.addEventListener('click', async function() {
+            const productId = this.getAttribute('data-product-id');
+            const response = await fetch(`https://127.0.0.1:3000/add-cart/${productId}`, { method: 'POST' });
+            if (response.redirected) {
+                window.location.replace(response.url);
+            }
+          });
+        });
+        //- function addCartEvent() {
+
+        //- }
+        //- async function addToCart(id, name, price) {
+        //-     const productData = { id, name, price };
+
+        //-     try {
+        //-         const response = await fetch('http://localhost:3000/add-to-cart', {
+        //-         method: 'POST',
+        //-         headers: {
+        //-             'Content-Type': 'application/json'
+        //-         },
+        //-         body: JSON.stringify(productData)
+        //-         });
+
+        //-         if (response.ok) {
+        //-         const result = await response.json();
+        //-         console.log('Product added to cart:', result);
+        //-         alert(`${name} has been added to your cart!`);
+        //-         } else {
+        //-         console.error('Error adding product to cart');
+        //-         }
+        //-     } catch (error) {
+        //-         console.error('Network error:', error);
+        //-         alert('Failed to add product to cart');
+        //-     }
+        //- }
