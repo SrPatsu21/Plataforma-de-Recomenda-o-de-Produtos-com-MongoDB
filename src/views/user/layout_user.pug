@@ -16,10 +16,15 @@ html(lang="en")
                         a(href="/" class="text-gray-800 hover:text-black px-3 py-2 rounded-md text-sm font-medium") Products
                         a(href="#" class="text-gray-800 hover:text-black px-3 py-2 rounded-md text-sm font-medium") Buy history
                         a(href="/profile" class="text-gray-800 hover:text-black px-3 py-2 rounded-md text-sm font-medium") Profile
+                        a(href="/cart" class="text-gray-800 hover:text-black px-3 py-2 rounded-md text-sm font-medium") Cart
                     .flex.items-center.space-x-4
                         .relative
-                        a(href="/logout")
-                            button(id="dropdown-btn" class="flex items-center text-sm bg-gray-500 text-white px-4 py-2 rounded-md focus:outline-none") Logout
+                        if login
+                            a(href="/logout")
+                                button(id="dropdown-btn" class="flex items-center text-sm bg-gray-500 text-white px-4 py-2 rounded-md focus:outline-none") Logout
+                        else
+                            a(href="/login")
+                                button(id="dropdown-btn" class="flex items-center text-sm bg-gray-500 text-white px-4 py-2 rounded-md focus:outline-none") Login
                     div(class="md:hidden flex items-center")
                         button(id="mobile-menu-btn" class="text-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500")
                             svg.h-6.w-6(xmlns="http://www.w3.org/2000/svg", fill="none", viewBox="0 0 24 24", stroke="currentColor")
@@ -29,7 +34,7 @@ html(lang="en")
                         a(href="/", class="text-gray-800 hover:text-black block px-3 py-2 rounded-md text-base font-medium") Products
                         a(href="#", class="text-gray-800 hover:text-black block px-3 py-2 rounded-md text-base font-medium") Buy history
                         a(href="/profile", class="text-gray-800 hover:text-black block px-3 py-2 rounded-md text-base font-medium") Profile
-        main(class="bg-slate-300 flex items-center justify-center min-h-screen mt-8 pb-10")
+        main(class="bg-slate-300 flex items-center justify-center min-h-screen mt-16")
             block content
 
         footer.bg-gray-800.text-white.py-6

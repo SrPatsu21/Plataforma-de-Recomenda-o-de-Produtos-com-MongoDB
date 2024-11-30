@@ -1,0 +1,49 @@
+extends layout_user.pug 
+block content 
+    h2(class="text-2xl font-semibold mb-6") Complete Your Purchase
+
+      //- Order Summary
+      section(class="mb-8")
+        h3(class="text-xl font-semibold mb-4") Order Summary
+        div(class="space-y-4")
+          each product, index in products
+            div(class="flex justify-between items-center")
+              span= product.name
+              span= "$" + product.price.$numberDecimal
+            div(class="flex justify-between items-center font-semibold border-t-2 pt-4")
+                span Total
+                span= "$" + subtotal
+
+      //- Payment Form
+      section
+        h3(class="text-xl font-semibold mb-4") Payment Details
+        form(action="/process-payment" method="POST")
+          //- Name
+          div(class="mb-4")
+            label(for="name" class="block text-sm font-medium text-gray-700") Full Name
+            input(type="text" id="name" name="name" class="mt-1 p-2 w-full border rounded-md shadow-sm" placeholder="Enter your full name" required)
+
+          //- Address
+          div(class="mb-4")
+            label(for="address" class="block text-sm font-medium text-gray-700") Shipping Address
+            input(type="text" id="address" name="address" class="mt-1 p-2 w-full border rounded-md shadow-sm" placeholder="Enter shipping address" required)
+
+          //- Credit Card
+          div(class="mb-4")
+            label(for="card-number" class="block text-sm font-medium text-gray-700") Card Number
+            input(type="text" id="card-number" name="card-number" class="mt-1 p-2 w-full border rounded-md shadow-sm" placeholder="1234 5678 1234 5678" required)
+
+          div(class="mb-4 flex space-x-4")
+            //- Expiry Date
+            div(class="flex-1")
+              label(for="expiry" class="block text-sm font-medium text-gray-700") Expiry Date
+              input(type="text" id="expiry" name="expiry" class="mt-1 p-2 w-full border rounded-md shadow-sm" placeholder="MM/YY" required)
+
+            //- CVV
+            div(class="flex-1")
+              label(for="cvv" class="block text-sm font-medium text-gray-700") CVV
+              input(type="text" id="cvv" name="cvv" class="mt-1 p-2 w-full border rounded-md shadow-sm" placeholder="123" required)
+
+          //- Submit Button
+          div(class="mt-6 text-center")
+            button(type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 focus:outline-none") Complete Payment
