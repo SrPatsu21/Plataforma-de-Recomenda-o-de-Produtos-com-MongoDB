@@ -69,15 +69,13 @@ const createProduct = async (req, res, next) => {
   const { name, category, tags, price} = req.body;
   const img_id = req.img_id
   const active = true
-  const rating = 0;
   try {
     const newProduct = new Products({
         name,
         img_id,
         category,
-        tags,
+        tags: tags ? tags.split(',').map(cat => cat.trim()) : [],
         price,
-        rating,
         active
     });
     await newProduct.save();
